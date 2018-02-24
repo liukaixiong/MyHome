@@ -34,7 +34,7 @@ jvm 中，程序计数器、虚拟机栈、本地方法栈都是随线程而生�
 
 它的主要缺点有两个：一个是效率问题，标记和清除过程的效率都不高；另外一个是空间问题，标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致，当程序在以后的运行过程中需要分配较大对象时无法找到足够的连续内存而不得不提前触发另一次垃圾收集动作。
 
-![wpsA73E.tmp](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/b5de6b4b363e46b68245891c6114aeb4/6-1575111287.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-a50919c5a51a1982.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
  
 
@@ -44,7 +44,7 @@ jvm 中，程序计数器、虚拟机栈、本地方法栈都是随线程而生�
 
 这样使得每次都是对其中的一块进行内存回收，内存分配时也就不用考虑内存碎片等复杂情况，只要移动堆顶指针，按顺序分配内存即可，实现简单，运行高效。只是这种算法的代价是将内存缩小为原来的一半，持续复制长生存期的对象则导致效率降低。
 
-![wps9D31.tmp](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/4fec4ab4326e4332a9a2c2b571151e23/03-328169343.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-933a2df24e26c6a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
  
 
@@ -54,7 +54,7 @@ jvm 中，程序计数器、虚拟机栈、本地方法栈都是随线程而生�
 
 根据老年代的特点，有人提出了另外一种“标记-整理”（Mark-Compact）算法，标记过程仍然与“标记-清除”算法一样，但后续步骤不是直接对可回收对象进行清理，而是让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存
 
-![wps3952.tmp](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/969a070ab5be41cdb06d928731d53afe/9-1187241876.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-9c99dbc4c832ab83.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
  
 
@@ -80,7 +80,7 @@ GC分代的基本假设：绝大部分对象的生命周期都非常短暂，存
 
  
 
-![wpsA77.tmp](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/620e9ca109a0422e9027c532936267b9/91-864339858.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-9a03f8eb6804fba5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
  
 
@@ -96,7 +96,7 @@ ParNew收集器其实就是Serial收集器的多线程版本。新生代并行�
 
  
 
-![wps6A83.tmp](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/2ee8a496dbf24bf69165e4ebe2bd325b/7-1533472044.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-cd84d1ab1e7b2e6e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 Parallel收集器
 
@@ -144,7 +144,7 @@ CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时�
 
 ​            -XX:ParallelCMSThreads  设定CMS的线程数量（一般情况约等于可用CPU数量）
 
-![wpsCA6E.tmp](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/2f43a5bd8d9a4555a26c27a85e8a01f9/5-1027326741.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-b694b3898fdda9d4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ​         
 
@@ -158,7 +158,7 @@ G1是目前技术发展的最前沿成果之一，HotSpot开发团队赋予它�
 
 上面提到的垃圾收集器，收集的范围都是整个新生代或者老年代，而G1不再是这样。使用G1收集器时，Java堆的内存布局与其他收集器有很大差别，它将整个Java堆划分为多个大小相等的独立区域（Region），虽然还保留有新生代和老年代的概念，但新生代和老年代不再是物理隔阂了，它们都是一部分（可以不连续）Region的集合。
 
-![wps3B4C.tmp](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/b1a5a8a2f0f241b3844a8a306cd5ad63/-1572774731.jpeg)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-d32b0b061a90d381.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
  
 
@@ -174,17 +174,17 @@ G1的新生代收集跟ParNew类似，当新生代占用达到一定比例的时
 
 3、Concurrent Marking，在整个堆中进行并发标记(和应用程序并发执行)，此过程可能被young GC中断。在并发标记阶段，若发现区域对象中的所有对象都是垃圾，那个这个区域会被立即回收(图中打X)。同时，并发标记过程中，会计算每个区域的对象活性(区域中存活对象的比例)。
 
-![wps93E7.tmp](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/ebcc81811ab54dad8456a44a66daaa04/03-774809988.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-aab8bbc77cd6212e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 4、Remark, 再标记，会有短暂停顿(STW)。再标记阶段是用来收集 并发标记阶段 产生新的垃圾(并发阶段和应用程序一同运行)；G1中采用了比CMS更快的初始快照算法:snapshot-at-the-beginning (SATB)。
 
 5、Copy/Clean up，多线程清除失活对象，会有STW。G1将回收区域的存活对象拷贝到新区域，清除Remember Sets，并发清空回收区域并把它返回到空闲区域链表中。
 
-![wps47EC.tmp](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/27d735af79d1472698a87fb800734004/6-1729618538.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-cc14eae7813713f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 6、复制/清除过程后。回收区域的活性对象已经被集中回收到深蓝色和深绿色区域。
 
-![wpsEAB1.tmp](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/20bc0f0a6b974351a91edb1f271646db/78-703896755.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-5bf3fa8a75132b66.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
  
 

@@ -1,3 +1,8 @@
+---
+typora-root-url: ..\..\..\image
+typora-copy-images-to: ..\..\..\image
+---
+
 
 
 所有的Java开发人员可能会遇到这样的困惑？我该为堆内存设置多大空间呢？OutOfMemoryError的异常到底涉及到运行时数据的哪块区域？该怎么解决呢？其实如果你经常解决服务器性能问题，那么这些问题就会变的非常常见，了解JVM内存也是为了服务器出现性能问题的时候可以快速的了解那块的内存区域出现问题，以便于快速的解决生产故障。
@@ -8,7 +13,7 @@
 
 ## Java的内存结构：
 
-![JUtH_20121024_RuntimeDataAreas_6_MemoryModel](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/4182d2e13d844e17897c41af1623c084/5-1252768148.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-c906c742eddfc360.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 JVM内存结构主要有三大块：堆内存、方法区和栈。堆内存是JVM中最大的一块由年轻代和老年代组成，而年轻代内存又被分成三部分，Eden空间、From Survivor空间、To Survivor空间,默认情况下年轻代按照8:1:1的比例来分配；
 
@@ -18,7 +23,7 @@ JVM内存结构主要有三大块：堆内存、方法区和栈。堆内存是JV
 
 在通过一张图来了解如何通过参数来控制各区域的内存大小
 
-![jvm_m_l](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/d1bcfd28387c469c9866faa4d2e0accc/81-223449019.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-86cffd469fbf6c01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 控制参数
 
@@ -46,7 +51,7 @@ JVM内存结构主要有三大块：堆内存、方法区和栈。堆内存是JV
 
 从更高的一个维度再次来看JVM和系统调用之间的关系
 
-![002hLfJYgy71J9KxlH53b](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/c799c5b6f2354c31bcc7422d6b49ac05/35-947282498.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-2ee97713efbe4a1e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 方法区和对是所有线程共享的内存区域；而java栈、本地方法栈和程序员计数器是运行是线程私有的内存区域。
 

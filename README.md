@@ -1,4 +1,16 @@
+---
+typora-copy-images-to: image\wz_img
+---
+
 ## 我的家
+
+![1519450795168](image/wz_img/1519450795168.png)
+
+
+
+
+
+
 
 ## java基础篇
 

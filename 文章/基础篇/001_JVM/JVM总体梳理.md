@@ -17,7 +17,7 @@
 
 这里画了一个思维导图，将所有的知识点进行了陈列，因为图比较大可以点击右键下载了放大查看。
 
-![img](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/bf9a0a8c80f94edb9931bf897e89fd62/jvm.jpeg)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-b5695a0ecb44bfd3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 #### 类的加载机制
 
@@ -36,7 +36,7 @@
 
 类的生命周期包括这几个部分，加载、连接、初始化、使用和卸载，其中前三部是类的加载的过程,如下图；
 
-![img](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/c38b31549844436996f17afcc668d625/class.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-dedcfc930c001369.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 - 加载，查找并加载类的二进制数据，在Java堆中也创建一个java.lang.Class类的对象
 - 连接，连接又包含三块内容：验证、准备、初始化。1）验证，文件格式、元数据、字节码、符号引用验证；2）准备，为类的静态变量分配内存，并将其初始化为默认值；3）解析，把类中的符号引用转换为直接引用
@@ -52,7 +52,7 @@
 
 类加载器
 
-![img](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/3bd47cc4c0cd482f80e8c12803644770/calssloader.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-8aa83a74f03735d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 - 启动类加载器：Bootstrap ClassLoader，负责加载存放在JDK\jre\lib(JDK代表JDK的安装目录，下同)下，或被-Xbootclasspath参数指定的路径中的，并且能被虚拟机识别的类库
 - 扩展类加载器：Extension ClassLoader，该加载器由sun.misc.Launcher$ExtClassLoader实现，它负责加载DK\jre\lib\ext目录中，或者由java.ext.dirs系统变量指定的路径中的所有类库（如javax.*开头的类），开发者可以直接使用扩展类加载器。
@@ -73,7 +73,7 @@
 
 jvm内存结构
 
-![img](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/865549fe39ed45dbb3b455990b9b1b95/structure.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-0211db1bc37337b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 方法区和堆是所有线程共享的内存区域；而java栈、本地方法栈和程序计数器是运行是线程私有的内存区域。
 
@@ -119,7 +119,7 @@ GC最基础的算法有三种：标记 -清除算法、复制算法、标记-压
 - 标记-压缩算法，标记过程仍然与“标记-清除”算法一样，但后续步骤不是直接对可回收对象进行清理，而是让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存
 - 分代收集算法，“分代收集”（Generational Collection）算法，把Java堆分为新生代和老年代，这样就可以根据各个年代的特点采用最适当的收集算法。(年轻代:复制算法；老年代：标记清除，标记整理。)
 
-![img](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/6922438fd5c041efa45f357d5229658f/clipboard.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-5048f20e38c2d4d3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 垃圾回收器
 
@@ -150,11 +150,11 @@ GC日志分析
 
 young gc 日志:
 
-![img](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/92c85506a5c44664904001e00c4ce64b/yong.jpeg)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-56c9274c3d3a59e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 Full GC日志:
 
-![img](C:/Users/admin/AppData/Local/YNote/data/qq4772AEA00F752B546CA669EB2B9815CF/d93a326045854ccaa8d422e2ad76abc7/full.jpeg)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-7dd3f7f10b272da8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 调优命令
 

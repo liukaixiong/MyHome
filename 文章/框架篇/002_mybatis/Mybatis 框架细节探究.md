@@ -63,9 +63,7 @@
 
 `org.mybatis.spring.SqlSessionFactoryBean` 类结构:
 
-
-
-![TIM图片20180126163141](E:\my\doc\img\TIM图片20180126163141.png)
+![image.png](http://upload-images.jianshu.io/upload_images/6370985-2cc689a105febeb7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 `org.springframework.beans.factory.InitializingBean` : 执行该类的时候会触发`afterPropertiesSet` 方法 , 它这里面用来做一些必填参数校验,并且构建一个`org.apache.ibatis.session.SqlSessionFactory`对象,mybatis最重要的一个对象,持有`org.apache.ibatis.session.Configuration`(配置文件)和`org.apache.ibatis.executor.Executor`(具体执行sql方法)对象.  
 
