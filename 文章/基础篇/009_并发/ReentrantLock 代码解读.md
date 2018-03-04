@@ -1,4 +1,5 @@
-## 基础铺垫:
+## 基础铺垫
+
 > node包装的状态:
 - SIGNAL(-1) ：线程的后继线程正/已被阻塞，当该线程release或cancel时要重新这个后继线程(unpark)  
 - CANCELLED(1)：因为超时或中断，该线程已经被取消  
@@ -6,8 +7,12 @@
 - PROPAGATE(-3)：传播共享锁
 - 0：0代表无状态
 
-> AQS的属性结构:
+### AQS的属性结构
+
 ```java
+
+// ---------------需要注意的是这个head和tail是一个双向链表--------------------------
+
 // 头结点，你直接把它当做 当前持有锁的线程 可能是最好理解的
 private transient volatile Node head;
 // 阻塞的尾节点，每个新的节点进来，都插入到最后，也就形成了一个隐视的链表
@@ -15,9 +20,14 @@ private transient volatile Node tail;
 // 这个是最重要的，不过也是最简单的，代表当前锁的状态，0代表没有被占用，大于0代表有线程持有当前锁
 // 之所以说大于0，而不是等于1，是因为锁可以重入嘛，每次重入都加上1
 private volatile int state;
+// 代表当前持有独占锁的线程，举个最重要的使用例子，因为锁可以重入
+// reentrantLock.lock()可以嵌套调用多次，所以每次用这个来判断当前线程是否已经拥有了锁
+// if (currentThread == getExclusiveOwnerThread()) {state++}
+private transient Thread exclusiveOwnerThread; //继承自AbstractOwnableSynchronizer
 ```
 
-> Node的结构:
+### Node的结构
+
 ```java
 static final class Node {
     /** Marker to indicate a node is waiting in shared mode */
@@ -57,14 +67,16 @@ static final class Node {
 }
 ```
 
+**这里需要搞清楚的一个概念**:
 
+1. `head`和`tail`分别代表的是当前链表的`第一个`和`最后一个`
+2. Node中的`prev`和`next`代表的是链表内的`前继节点`和`后继节点`
 
 
 
 ## lock 方法调用过程:
 
 ```java
-        
         // step : 1
         final void lock() {
             // 如果state状态为0的话,就为他设置初始状态
@@ -198,7 +210,7 @@ static final class Node {
             boolean interrupted = false;
             // 注意:无限循环
             for (;;) {
-                // 获取头部节点
+                // 获取前继节点(也就是链表中的上一节点状态)
                 final Node p = node.predecessor();
                 // 比较头部是否相同
                 // tryAcquire尝试判断当前线程是否为抢占锁或者是否是重入锁
@@ -212,7 +224,7 @@ static final class Node {
                 }
                 // 这一步很关键 2.3.1
                 if (shouldParkAfterFailedAcquire(p, node) &&
-                // 2.3.2
+                	// 2.3.2
                     parkAndCheckInterrupt())
                     interrupted = true;
             }
@@ -229,7 +241,7 @@ static final class Node {
     // 概述: 当waitStatus == -1时表示需要被唤醒
     // 当返回false时表示不需要被唤醒
     private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
-        // 判断当前节点的状态
+        // 判断前驱节点的状态
         int ws = pred.waitStatus;
         
         // 前驱节点的 waitStatus == -1 ，说明前驱节点状态正常，当前线程需要挂起，直接可以返回true
@@ -247,6 +259,8 @@ static final class Node {
         // 所以下面这块代码说的是将当前节点的prev指向waitStatus<=0的节点，
         // 简单说，就是为了找个好爹，因为你还得依赖它来唤醒呢，如果前驱节点取消了排队，
         // 找前驱节点的前驱节点做爹，往前循环总能找到一个好爹的
+      	// 能进入到这里的节点说明已经被取消了的,取消有几种场景,其中就是超时
+      	// tryLock(超时时间),一旦超时会调用cancelAcquire方法,这个方法会将waitStatus设置成大于1的情况, 如果这个线程存在多个竞争的话,可能会超过1 
         if (ws > 0) {
             /*
              * Predecessor was cancelled. Skip over predecessors and
