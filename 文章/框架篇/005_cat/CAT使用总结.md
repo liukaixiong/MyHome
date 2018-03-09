@@ -88,6 +88,21 @@
       4. 启动jetty	
 
 
-   ### 源码笔记
 
-   ​
+
+## 错误介绍
+
+1. 调整CAT的`plexus/components-cat-client.xml`文件修改消息类型的时候将`com.dianping.cat.message.MessageProducer`的实现类`implementation`的路径写错了,导致服务器爆出的异常为`Unable to get instance of MessageManager, please make sure the environment was setup correctly`。这个异常比较麻烦的就是本地不会出现,但是服务器有可能会出现!!!!!
+
+
+
+### 源码笔记
+
+   
+
+`ComponentModelManager` : 扫描类,专门扫描META-INF下面的文件夹的
+
+
+
+
+
