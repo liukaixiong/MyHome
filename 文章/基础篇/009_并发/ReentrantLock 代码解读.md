@@ -326,20 +326,94 @@ if (!tryAcquire(arg) &&
             selfInterrupt();
 ```
 
+3. 抢占锁这块代码
+
+```java
+final boolean nonfairTryAcquire(int acquires) {
+  // 注意看清楚,这个是当前线程
+  final Thread current = Thread.currentThread();
+  // 这个是获取目前资源池的数量
+  int c = getState();
+  if (c == 0) {
+    // 等于0则抢占
+    if (compareAndSetState(0, acquires)) {
+      setExclusiveOwnerThread(current);
+      return true;
+    }
+  }
+  // 又或者是同一个线程执行重入规则
+  else if (current == getExclusiveOwnerThread()) {
+    int nextc = c + acquires;
+    if (nextc < 0) // overflow
+      throw new Error("Maximum lock count exceeded");
+    setState(nextc);
+    return true;
+  }
+  return false;
+}
+```
+
+
+
+**tryAcquire**:
+
 
 - 判断当前线程和和锁的拥有者是否为同一个,如果是同一个的话则只是简单的+1,并且设置为state,所以通过setStatus修改，而非CAS，也就是说这段代码实现了偏向锁的功能，并且实现的非常漂亮。
-
 - 如果上面的锁**已经被抢占**,并且锁的拥有者**非当前线程**,则开始将线程添加到一个无法获得锁的线程包装链表中这个链表专门用于承装没有抢占到锁的线程,没有抢到的则会在**链表**[**阻塞队列**]的处于末端..[**`addWaiter`**方法]
 
     - 阻塞队列:因为  争抢锁的线程可能很多,但是只能有一个线程拿到锁,其他线程必须等待,这个时候就需要一个queue来管理这些线程,AQS用的是一个FIFO的队列,就是一个链表。每个node都持有后继节点的引用，AQS采用了CLH锁的变体来实现
 
 
-- **通过自旋**将已经加到阻塞队列里面的线程进行阻塞,阻塞前会判断该节点的前继节点是否为head节点,如果是的则会尝试进行一次抢占,如果没有成功,则会对该节点的前继节点做判断,是否为有效节点<0;直到找到一个有效的停靠节点之后,才开始阻塞
+**acquireQueued**
+
+- 通过**自旋**将已经加到阻塞队列里面的线程进行阻塞,阻塞前会判断该节点的前继节点是否为head节点,如果是的则会尝试进行一次抢占,如果没有成功,则会对该节点的**前继节点**做判断,是否为有效节点<0;直到找到一个**有效的停靠节点**之后,才开始阻塞
 
     - 阻塞线程和解除阻塞采用的是AQS的LockSupport.park(thread) 来挂起线程，用unpark来唤醒线程。
-
 - 一旦有线程被唤醒,则会回到自旋当中去继续判断该节点的前继节点是否为head。。。。直到为head为止
 
+
+
+
+**释放锁关键代码**
+
+```java
+// 注意这里的node是等于head节点的
+private void unparkSuccessor(Node node) {
+  		// 获取head节点的状态
+        int ws = node.waitStatus;
+  		// 判断节点的状态是否有效?有效的话,将状态重置
+        if (ws < 0)
+            compareAndSetWaitStatus(node, ws, 0);
+
+  		// 这里承接上面
+  		// 判断head节点是否真的有效?万一刚好上面bingfa取消了?
+  		// 判断head节点是否有效?如果有效,则直接调用下面的唤醒方法
+        Node s = node.next;
+        if (s == null || s.waitStatus > 0) {
+          // 能进入到这里面说明head节点已经放弃了
+            s = null;
+          // 这里开始从tail节点中找寻一个有效节点
+          // 这里注意咯,这里是一直循环往上找!!!!!!
+          // 找到上一个节点有效 还bu行?还得继续往上找,直到找到最靠前bing且有效的节点
+            for (Node t = tail; t != null && t != node; t = t.prev)
+                if (t.waitStatus <= 0)
+                    s = t;
+        }
+  		// 找到一个最有效的线程, 唤醒
+        if (s != null)
+            LockSupport.unpark(s.thread);
+    }
+```
+
+**唤醒的流程**:
+
+- 调用到唤醒之后,找到一个有效的线程节点
+  - 如果是head节点,直接回到3.抢占代码那块,通过head节点匹配上直接唤醒,返回
+  - 如果head节点放弃了呢?
+    - 找到一个靠谱的最靠前的也就是head节点后面的(不管后几位,因为**shouldParkAfterFailedAcquire**方法迟早会将这个节点挂靠到head下面)下一位有效的节点
+    - 这个线程被唤醒之后,它的前继节点一定是head.所以满足条件,进入尝试获取
+
+ 
 
 
 非公平锁的场景:  
