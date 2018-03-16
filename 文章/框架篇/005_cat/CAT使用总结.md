@@ -47,7 +47,7 @@
       	   <repository>
       		   <id>releases</id>
       		   <name>Nexus Release Repository</name>
-      		   <url>http://192.168.0.11:8081/nexus/content/repositories/elab/</url>
+      		   <url>资源地址</url>
       	   </repository>
             <!--<snapshotRepository>-->
                <!--<id>snapshots</id>-->
@@ -95,6 +95,7 @@
 1. 调整CAT的`plexus/components-cat-client.xml`文件修改消息类型的时候将`com.dianping.cat.message.MessageProducer`的实现类`implementation`的路径写错了,导致服务器爆出的异常为`Unable to get instance of MessageManager, please make sure the environment was setup correctly`。这个异常比较麻烦的就是本地不会出现,但是服务器有可能会出现!!!!!
 
 
+   ​	**非常有可能是jar包加载顺序的问题**
 
 ### 源码笔记
 

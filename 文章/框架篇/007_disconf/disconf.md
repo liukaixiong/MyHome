@@ -1,4 +1,14 @@
-# 相关资料
+
+
+
+
+
+
+
+
+#  
+
+相关资料
 
 github : https://github.com/knightliao/disconf
 
@@ -228,11 +238,11 @@ disconf.ignore=jdbc-mysql.properties
 
 1. **问题**
 
-​	一直以来，凡是使用 disconf的程序均需要 `disconf.properties` ，在这个文件里去控制 app/env/version。
+  ​一直以来，凡是使用 disconf的程序均需要 `disconf.properties` ，在这个文件里去控制 app/env/version。
 
-​	因此，我们要部署到不同的环境中，还是需要 不同的 `disconf.properties`。
+  ​因此，我们要部署到不同的环境中，还是需要 不同的 `disconf.properties`。
 
-​	有一种解决方法是，通过 jenkins 来进行打包，准备多份 `disconf.properties` 文件。
+  ​有一种解决方法是，通过 jenkins 来进行打包，准备多份 `disconf.properties` 文件。
 
 2. **解决方法**
 
@@ -392,6 +402,37 @@ disconf.enable_local_download_dir_in_class_path=true
 -Ddisconf.conf=/tmp/disconf.properties
 ```
 
+
+
+
+
+#### 关于配置文件分级目录配置
+
+一般情况下,你如果上传文件它的路径会在应用中的根目录进行存放,但是如果你的配置文件是多级目录呢?不在根级目录呢?
+
+**web配置**:
+
+ 	1. 这里切记新建配置文件的时候不能使用**上传文件类型**去做,而是使用**输入文本**的方式去做
+      	1. 为什么?**因为上传文件的方式无法指定文件名!**
+ 	2. 这里切记文件名的方式得这么去填写:  `文件目录/文件名称.类型`
+
+**client配置:**
+
+`applicationContext-disconf.xml` 这里只贴关键代码
+
+```xml
+<bean id="configproperties_no_reloadable_disconf"
+          class="com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>文件目录/文件名称.后缀</value>
+            </list>
+        </property>
+    </bean>
+```
+
+
+
 ------
 
 
@@ -467,6 +508,10 @@ disconf.enable_local_download_dir_in_class_path=true
      `StaticScannerMgr`: 文件管理对象,最终配置都会通过该文件去生成处理
 
      `DisconfCenterStore`: 最终生成配置文件对象
+
+     `StaticScannerNonAnnotationFileMgrImpl`:非注解配置文件处理
+
+     ​	`getDisconfCenterFile`: 构建一个`DisconfCenterBaseModel`对象
 
 #### 初始化配置
 
