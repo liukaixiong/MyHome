@@ -16,15 +16,14 @@ jvm 中，程序计数器、虚拟机栈、本地方法栈都是随线程而生�
 
 在Java语言中，GC Roots包括：
 
-  虚拟机栈中引用的对象。
+- 虚拟机栈中引用的对象。
+-  方法区中类静态属性实体引用的对象。
+-  方法区中常量引用的对象。
+- 
 
-  方法区中类静态属性实体引用的对象。
+- #### 标记 -清除算法
 
-  方法区中常量引用的对象。
 
-  本地方法栈中JNI引用的对象。
-
- 
 
 ### 垃圾收集算法
 
@@ -200,4 +199,11 @@ G1的新生代收集跟ParNew类似，当新生代占用达到一定比例的时
 | 组合6  | Parallel Scavenge | Parallel Old   | Parallel Old是Serial Old的并行版本             |
 | 组合7  | G1GC              | G1GC           | -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC #开启-XX:MaxGCPauseMillis =50 #暂停时间目标-XX:GCPauseIntervalMillis =200 #暂停间隔目标-XX:+G1YoungGenSize=512m #年轻代大小-XX:SurvivorRatio=6 #幸存区比例 |
 
- 
+###### 拓展yanshen
+
+#### 垃圾回收的瓶颈
+
+**full GC 带来的应用停顿**
+
+
+
