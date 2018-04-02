@@ -95,7 +95,13 @@
 1. 调整CAT的`plexus/components-cat-client.xml`文件修改消息类型的时候将`com.dianping.cat.message.MessageProducer`的实现类`implementation`的路径写错了,导致服务器爆出的异常为`Unable to get instance of MessageManager, please make sure the environment was setup correctly`。这个异常比较麻烦的就是本地不会出现,但是服务器有可能会出现!!!!!
 
 
-   ​	**非常有可能是jar包加载顺序的问题**
+   	**非常有可能是jar包加载顺序的问题**
+
+2. Netty write buffer is full  || Could not load META-INF/services/javax.xml.parsers.SAXParserFactory
+
+   **如果出现非常多的话**-> **如果是tomcat部署的话一定要记得查看是否是不是停止的时候进程没有删完毕** [ **ps -ef|grep tomcat** ]
+
+
 
 ### 源码笔记
 
