@@ -120,6 +120,14 @@ private void doReleaseShared() {
            * fails, if so rechecking.
            */
   // 自旋,通过头结点进行释放
+  /**
+  这里需要先声明一个细节点,不然很容易被绕进去,这里的正常逻辑应该是
+  1. head的节点是Node.SIGNAL状态
+  2. 单个线程释放头结点的时候肯定会经过unparkSuccessor方法,这个方法会将头结点唤醒之后,会经过自旋回到doAcquireSharedInterruptibly中的setHeadAndPropagate方法重新更换头结点,一般是让下一级节点顶上
+  3. h == head 一定是为true的 (前提是单个线程的情况下)
+  
+  而下面的代码,除了正常情况,其他的都是抢占并发资源的情况,如何去调整?都是通过自旋的方式,一遍一遍的去释放,直道最终释放完毕h == head 自旋结束
+  */
   for (;;) {
     Node h = head;
     
@@ -139,7 +147,7 @@ private void doReleaseShared() {
                !compareAndSetWaitStatus(h, 0, Node.PROPAGATE))
         continue;                // loop on failed CAS
     }
-    if (h == head)                   // loop if head changed
+    if (h == head)                   // loop if head changed // __ 这里需要注意的是,如果h!=head说明已经被其他线程操作过一遍了,重新再来,又从头结点开始释放
       break;
   }
 }
@@ -345,14 +353,166 @@ public final void acquireSharedInterruptibly(int arg)
         throw new InterruptedException();
   	// 如果资源的数量小于0了
     if (tryAcquireShared(arg) < 0)
-      	// 阻塞当前还在
+      	// 阻塞当前还在抢占的线程
         doAcquireSharedInterruptibly(arg);
+}
+
+// 尝试获取共享锁
+protected int tryAcquireShared(int acquires) {
+  for (;;) {
+    // 如果等待队列中还有线程等待,则说明资源已经被抢光了,直接排到后面等待吧
+    if (hasQueuedPredecessors())
+      return -1;
+ 	// 获取状态之后进行递减得到的资源数是否为0
+    int available = getState();
+    int remaining = available - acquires;
+    // 如果小于0,或者CAS成功之后,返回值
+    if (remaining < 0 ||
+        compareAndSetState(available, remaining))
+      return remaining;
+  }
+}
+
+/**
+ * 能进入到这个方法的话说明资源数已经被用光了
+ * 这个方法只需要负责,将这些没有抢占到的资源给放到阻塞队列中并阻塞即可
+ */
+private void doAcquireSharedInterruptibly(int arg)
+        throws InterruptedException {
+  	// 将当前线程构建成一个新的节点,并且加入到阻塞队列尾部
+    final Node node = addWaiter(Node.SHARED);
+    boolean failed = true;
+    try {
+      // 自旋
+      for (;;) {
+        // 获取等待队列中的最后一个节点
+        final Node p = node.predecessor();
+        // 如果这个节点是head节点的话
+        if (p == head) {
+          // 尝试抢占一下锁
+          int r = tryAcquireShared(arg);
+          // 如果资源锁还有的情况下
+          if (r >= 0) {
+            // 释放当前正在阻塞的对象,如果有的对象正在阻塞中,则设置成PROPAGATE状态
+            setHeadAndPropagate(node, r);
+            p.next = null; // help GC
+            failed = false;
+            return;
+          }
+        }
+        // 加入到阻塞队列中,并且获取一个有效的前继节点
+        if (shouldParkAfterFailedAcquire(p, node) &&
+            // 阻塞该节点
+            parkAndCheckInterrupt())
+          throw new InterruptedException();
+      }
+    } finally {
+      if (failed)
+        cancelAcquire(node);
+    }
+}
+
+```
+
+**执行流程**:
+
+ 1.  判断state的资源数是否小于0
+
+     1.1 不小于 -->  通过CAS将数值-1之后返回
+
+     1.2 进入2
+
+     2. 将当前线程构建成一个新的Node节点
+
+     3. 获取新的节点的前继节点,如果是head节点?
+
+       1. 再次尝试获取资源数,如果大于0
+       2. 则释放该节点
+
+     4. 将当前节点挂靠到一个可靠的前节点下,并加入到等待队列中
+
+     5. 开始进行自我阻塞,等待被唤醒
+
+**release**:
+
+```java
+public final boolean releaseShared(int arg) {
+  	// 尝试释放锁,资源数提升
+    if (tryReleaseShared(arg)) {
+      	// 释放锁
+        doReleaseShared();
+        return true;
+    }
+    return false;
+}
+// 这里就是简单的通过CAS将资源锁进行累加
+protected final boolean tryReleaseShared(int releases) {
+  for (;;) {
+    int current = getState();
+    int next = current + releases;
+    if (next < current) // overflow
+      throw new Error("Maximum permit count exceeded");
+    if (compareAndSetState(current, next))
+      return true;
+  }
+}
+
+private void doReleaseShared() {
+  for (;;) {
+    // 拿到头节点
+    Node h = head;
+    if (h != null && h != tail) {
+      int ws = h.waitStatus;
+      // 头结点的状态判断
+      if (ws == Node.SIGNAL) {
+        // 将头结点设置成自由状态
+        if (!compareAndSetWaitStatus(h, Node.SIGNAL, 0))
+          continue;            // loop to recheck cases
+        // 释放锁,从尾节点一直到头结点
+        unparkSuccessor(h);
+      }
+      // 如果当前头结点还没有处于阻塞状态,则直接设置成传播状态
+      else if (ws == 0 &&
+               !compareAndSetWaitStatus(h, 0, Node.PROPAGATE))
+        continue;                // loop on failed CAS
+    }
+    // 如果上面的锁已经释放完毕了,这里的头结点也肯定就为空了
+    if (h == head)                   // loop if head changed
+      break;
+  }
+}
+// 具体释放锁的方法
+private void unparkSuccessor(Node node) {
+  // 获取要释放锁的节点的等待状态,一般是-1 阻塞状态
+  int ws = node.waitStatus;
+  
+  if (ws < 0)
+    compareAndSetWaitStatus(node, ws, 0);
+  // 如果该节点的下级节点为空
+  Node s = node.next;
+  if (s == null || s.waitStatus > 0) {
+    s = null;
+    // 从下往上找,一直找到第一个状态<=的进行释放
+    for (Node t = tail; t != null && t != node; t = t.prev)
+      if (t.waitStatus <= 0)
+        s = t;
+  }
+  // 如果该node的下级节点不为空,则直接唤醒
+  if (s != null)
+    LockSupport.unpark(s.thread);
 }
 ```
 
+**运行流程**
 
-
-
+1. 获取当前资源锁并且通过CAS累加
+2. 尝试释放锁,从头结点开始 - doReleaseShared
+3. 拿到头结点之后,判断头节点的状态
+   1. 如果阻塞,则开始唤醒
+   2. 如果状态为自由状态,则设置成共享状态标志
+      1. 为什么会这么做,因为多个线程同时操作的时候,头节点可能会被操作不及时
+      2. 头节点一旦被多个线程操作,势必会引起线程安全问题,所以这里也是为什么要使用自旋去从头结点释放
+      3. 如果h不等于头结点?说明已经被其他线程操作过一遍了,这里又要重新开始释放一次
 
 # 二者比较
 
@@ -361,7 +521,7 @@ public final void acquireSharedInterruptibly(int arg)
 1. 不可重用
 2. countDown后可以继续执行自己的任务
 3. 一般是阻塞主线程(**await**),子线程不会阻塞(**countDown**)
-
+4. ​
 
 
 
@@ -370,4 +530,7 @@ public final void acquireSharedInterruptibly(int arg)
 
 1. 可重用
 2. **await**后直接阻塞,但是如果出现线程中断或者超时,则直接唤醒该范围内的所有线程
-3. ​
+3. CyclicBarrier底层是用ReentrantLock的Condition去做的组唤醒
+
+
+
