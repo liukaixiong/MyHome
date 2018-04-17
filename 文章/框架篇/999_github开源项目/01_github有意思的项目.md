@@ -4,6 +4,8 @@
 
 ### [Java设计模式](https://github.com/iluwatar/java-design-patterns)
 
+结合:[设计模式文档](https://gof.quanke.name/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86.html)阅读会更有效果
+
 ### [算法](https://github.com/kdn251/interviews/blob/master/README-zh-cn.md)
 
 
