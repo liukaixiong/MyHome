@@ -15,7 +15,6 @@
    > mvn clean install -DskipTests
    2. 配置CAT环境
    > mvn cat:install
-   
    ```
 
 3. 构建环境
@@ -42,8 +41,8 @@
 
    3. 注意查看文档
 
-      1. cat/Dianping CAT 配置加载说明.md
-      2. Cat技术入门总结-0.1.0.doc
+      1. **cat/Dianping CAT 配置加载说明.md**
+      2. **Cat技术入门总结-0.1.0.doc**
 
    4. 客户端集成
 
@@ -115,13 +114,21 @@
    **如果出现非常多的话**-> **如果是tomcat部署的话一定要记得查看是否是不是停止的时候进程没有删完毕** [ **ps -ef|grep tomcat** ]
 
 
-
 ### 源码笔记
-
-   
 
 `ComponentModelManager` : 扫描类,专门扫描META-INF下面的文件夹的
 
+- plexus
+  - components-cat-client.xml
+    - com.dianping.cat.configuration.ClientConfigManager ： 客户端配置管理类
+    - com.dianping.cat.message.internal.MessageIdFactory : Id生成工厂类
+    - com.dianping.cat.message.spi.MessageManager : 消息管理配置类
+    - com.dianping.cat.message.MessageProducer : 消息生产者 , 具体对客户端暴露的消息生产接口
+    - com.dianping.cat.message.io.TcpSocketSender : 实际的消息发送者,利用tcp的方式,将消息传输到Cat的服务端
+    - com.dianping.cat.message.io.TransportManager : 具体的事务消息管理器,通过MessageManager 调度
+    - com.dianping.cat.message.spi.MessageStatistics : 消息的统计汇总
+    - com.dianping.cat.status.StatusUpdateTask : 状态更新任务,应该是发送给服务端心跳的
+    - ​
 
 
 `AlertManager` : 消息发送管理类
