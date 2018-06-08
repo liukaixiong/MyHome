@@ -15,7 +15,7 @@
    > mvn clean install -DskipTests
    2. 配置CAT环境
    > mvn cat:install
-
+   
    ```
 
 3. 构建环境
@@ -23,9 +23,18 @@
    1. 启动单机版
 
       - 检查下/data/appdatas/cat/ 下面需要的几个配置文件，配置文件在源码script 。
+
       - 在cat目录下执行 mvn install -DskipTests 。
+
+      - ##### 配置CAT的运行需要配置信息
+
+        `mvn cat:install`
+
       - 进入cat-home目录下,启动自带的Jetty容器
+
       - mvn jetty:run
+
+      - 
 
    2. 环境部署
 
@@ -87,7 +96,11 @@
 
       4. 启动jetty	
 
+   6. 邮件发送
 
+      1. 配置 - 登录 - 应用监控配置 - 异常报警配置 - 配置好你的项目名称 - 异常名称为 Total
+      2. 全局告警配置 - 默认告警人 - 配置你的邮件 , 如果有多个以","分割
+      3. 如果需要修改点击弹到你的默认页面请修改 : resources/freemaker/`exceptionAlert.ftl`和 `thirdpartyAlert.ftl`两个模版内容
 
 
 ## 错误介绍
@@ -111,5 +124,5 @@
 
 
 
-
+`AlertManager` : 消息发送管理类
 
