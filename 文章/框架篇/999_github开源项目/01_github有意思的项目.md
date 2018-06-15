@@ -79,8 +79,6 @@ Elastic-Job-Lite定位为轻量级无中心化解决方案，使用jar包的形�
 
 代码生成工具
 
-
-
 [apollo](https://github.com/ctripcorp/apollo/wiki/Quick-Start)
 
 Apollo（阿波罗）是携程框架部门研发的分布式配置中心，能够集中化管理应用不同环境、不同集群的配置，配置修改后能够实时推送到应用端，并且具备规范的权限、流程治理等特性，适用于微服务配置管理场景。
@@ -108,22 +106,18 @@ Gather Platform 数据抓取平台是一套基于[Webmagic](https://github.com/c
 
 5分钟即可部署完毕,半分钟即可完成一个爬虫,开始数据采集. 不需要进行任何编码就可以完成一个功能强大的爬虫.
 
-
-
 ### [eoLinker-API-Management-for-Java](https://github.com/eolinker/eoLinker-API-Management-for-Java)
 
 **eoLinker是国内最大的在线API接口管理平台，提供自动生成API文档、API自动化测试、Mock测试、团队协作等功能，旨在解决由于前后端分离导致的开发效率低下问题。**
-
-
-
-
 
 ### [hutool](https://github.com/looly/hutool/)
 
 一个Java基础工具类，对文件、流、加密解密、转码、正则、线程、XML等JDK方法进行封装，组成各种Util工具类
 
-
-
 ### [jmockdata](https://github.com/jsonzou/jmockdata)
 
 Jmockdta是一款实现模拟JAVA类型或对象的实例化并随机初始化对象的数据的工具框架。单元测试的利器。
+
+[proxyee-down](https://github.com/proxyee-down-org/proxyee-down)
+
+使用本地http代理服务器方式嗅探下载请求，支持所有操作系统和大部分主流浏览器,支持分段下载和断点下载。
