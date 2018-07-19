@@ -41,6 +41,8 @@ jinfo -flag+PrintGC pid
 
 ## jstat
 
+jstat -gccause 30544 60000 
+
 jstat -gc 30544 60000 -> 每分钟打印一次GC情况
 
 - `s0` : **Heap上的 Survivor space 0 区已使用空间的百分比**   

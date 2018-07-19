@@ -1,5 +1,3 @@
-相关链接地址 : [架构解析](https://blog.csdn.net/caohao0591/article/details/80207806)
-
 ## 部署步骤
 
 1. 下载源码
@@ -103,62 +101,6 @@
       2. 全局告警配置 - 默认告警人 - 配置你的邮件 , 如果有多个以","分割
       3. 如果需要修改点击弹到你的默认页面请修改 : resources/freemaker/`exceptionAlert.ftl`和 `thirdpartyAlert.ftl`两个模版内容
 
-   7. 与dubbo的总结
-
-      [dubbo的消息树构建](https://github.com/dubboclub/dubbo-plus)
-
-## 功能
-
-### 报表模块(Heartbeat)
-
-##### System Info  : `free -m` || `top -Hp 进程号` 查看
-
-LoadAverage : 负荷平均值 (top -Hp 进程号查看)
-
-FreePhysicalMemory : 可用的物理内存
-
-FreeSwapSpaceSize : 已经使用的物理内存大小
-
-##### GC Info (jstat -gccause 30544 60000 查看)
-
-PS ScavengeCount  : 新生代回收次数
-
-PS ScavengeTime  : 新生代回收时间
-
-PS MarkSweepCount : fullGC次数
-
-PS MarkSweepTime ：fullGC时间
-
-##### JVMHeap Info
-
-Code Cache : 代码的缓存大小
-
-Metaspace : 
-
-Compressed Class Space  :  压缩的类空间大小
-
-PS Eden Space  : 新生代总空间
-
-PS Survivor Space  : s块的空间使用情况
-
-PS Old Gen : 已经使用的老年代大小
-
-##### FrameworkThread Info
-
-HttpThread  : http线程数
-
-PigeonThread :
-
-ActiveThread : 活跃的线程数
-
-CatThread : 
-
-StartedThread : 已经使用过的线程数
-
-##### Disk Info
-
-
-
 
 ## 错误介绍
 
@@ -169,7 +111,7 @@ StartedThread : 已经使用过的线程数
 
 2. Netty write buffer is full  || Could not load META-INF/services/javax.xml.parsers.SAXParserFactory
 
-   **如果出现非常多的话**-> **如果是tomcat部署的话一定要记得查看是否是不是停止的时候进程没有删完毕** [ **ps -ef|grep tomcat** ] + **是不是端口出现了问题，比如端口是2281写成了2181 也是会出问题的。**
+   **如果出现非常多的话**-> **如果是tomcat部署的话一定要记得查看是否是不是停止的时候进程没有删完毕** [ **ps -ef|grep tomcat** ]
 
 
 ### 源码笔记
@@ -186,23 +128,8 @@ StartedThread : 已经使用过的线程数
     - com.dianping.cat.message.io.TransportManager : 具体的事务消息管理器,通过MessageManager 调度
     - com.dianping.cat.message.spi.MessageStatistics : 消息的统计汇总
     - com.dianping.cat.status.StatusUpdateTask : 状态更新任务,应该是发送给服务端心跳的
-    - 
+    - ​
 
 
 `AlertManager` : 消息发送管理类
-
-`TcpSocketReceiver`: 2280端口具体接收
-
-`MessageHandler`: 消息处理器,专门用来处理接收的端口数据
-
-`MessageConsumer`: 消息消费者接口定义
-
-`CatServlet` : 服务启动初始化类
-
- - init方法
-   - 定义了初始化`cat-client-xml`、`cat-server-xml`两个文件的加载入口
-
-
-
-`CatHomeModule`: Cat的环境配置文件具体执行类
 
