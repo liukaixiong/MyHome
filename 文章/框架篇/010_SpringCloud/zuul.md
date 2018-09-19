@@ -157,6 +157,24 @@ spring.redis.password=
 spring.redis.port=6379
 ```
 
+
+
+## 如何配置Hystrix线程池 
+
+```yaml
+zuul:
+  threadPool:
+    useSeparateThreadPools: true # 开启线程隔离
+    threadPoolKeyPrefix: zuulgw # 线程池的前缀
+    
+```
+
+
+
+
+
+
+
 ## 核心组件
 
 spring-cloud-netflix-core - spring.factories
@@ -196,6 +214,8 @@ org.springframework.cloud.netflix.metrics.ServoEnvironmentPostProcessor
 
 
 
+## 
+
 
 
 
@@ -212,7 +232,7 @@ org.springframework.cloud.netflix.metrics.ServoEnvironmentPostProcessor
 
 既然我们知道了请求路径会到ZuulController那么说明，初始化的时候一定和这个有关，查看ZuulController相关的调用链，去定位是在哪个部分被初始化的？
 
-然后得到`ZuulServerAutoConfiguration`，熟悉SpringBoot的同学应该知道，Configuration`结尾的通常都是Springboot的配置类，也就是说这个类就是Zuul相关的关键配置类都在这个里面..
+然后得到`ZuulServerAutoConfiguration`，熟悉SpringBoot的同学应该知道，Configuration`结尾的通常都是Spring的配置类，也就是说这个类就是Zuul相关的关键配置类都在这个里面..
 
 然后看到这个配置类
 
@@ -657,7 +677,7 @@ public Object run() {
     // 忽略某些请求
     this.helper.addIgnoredHeaders();
     try {
-        // 构建一个Ribbon的命令上下文
+        // 构建一个Ribbon的命令上下文，这个上下文会确定你到底是用HttpClient还是OKHttp
         RibbonCommandContext commandContext = buildCommandContext(context);
         // 请求转发
         ClientHttpResponse response = forward(commandContext);
@@ -733,6 +753,8 @@ protected static Setter getSetter(final String commandKey,
 								.andCommandKey(HystrixCommandKey.Factory.asKey(commandKey));
     	// 根据ribbon的配置构建一个Hystrix配置类
 		final HystrixCommandProperties.Setter setter = createSetter(config, commandKey, zuulProperties);
+    	// 根据配置来确定是采用信号量隔离还是线程隔离
+    	// 如果是信号量
 		if (zuulProperties.getRibbonIsolationStrategy() == ExecutionIsolationStrategy.SEMAPHORE){
 			final String name = ZuulConstants.ZUUL_EUREKA + commandKey + ".semaphore.maxSemaphores";
 			// we want to default to semaphore-isolation since this wraps
@@ -740,11 +762,14 @@ protected static Setter getSetter(final String commandKey,
 			final DynamicIntProperty value = DynamicPropertyFactory.getInstance()
 					.getIntProperty(name, zuulProperties.getSemaphore().getMaxSemaphores());
 			setter.withExecutionIsolationSemaphoreMaxConcurrentRequests(value.get());
-		} else if (zuulProperties.getThreadPool().isUseSeparateThreadPools()) {
+		} 
+    	// 如果是线程池
+    	else if (zuulProperties.getThreadPool().isUseSeparateThreadPools()) {
+            // 则根据每个线程池的key来构建一个线程池,让每个key都拥有自己独立的线程池
 			final String threadPoolKey = zuulProperties.getThreadPool().getThreadPoolKeyPrefix() + commandKey;
 			commandSetter.andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(threadPoolKey));
 		}
-		
+		// 将当前修改的配置列为默认的配置
 		return commandSetter.andCommandPropertiesDefaults(setter);
 		// @formatter:on
 	}
@@ -753,8 +778,6 @@ protected static Setter getSetter(final String commandKey,
 `createSetter` : 构建配置类的时候，主要是获取超时时间
 
 这里构建超时时间的时候又存在一个优先级的概念
-
-
 
 ```java
 protected static int getHystrixTimeout(IClientConfig config, String commandKey) {
@@ -787,8 +810,6 @@ protected static int getHystrixTimeout(IClientConfig config, String commandKey) 
 		return hystrixTimeout;
 	}
 ```
-
-
 
 关键的`forward`方法
 
@@ -833,9 +854,11 @@ public HttpClientRibbonCommand create(final RibbonCommandContext context) {
 		ZuulFallbackProvider zuulFallbackProvider = getFallbackProvider(context.getServiceId());
     	// 获取服务编号
 		final String serviceId = context.getServiceId();
-    	// 
+    	//  根据serviceId去获取RibbonLoadBalancingHttpClient的对象
 		final RibbonLoadBalancingHttpClient client = this.clientFactory.getClient(
 				serviceId, RibbonLoadBalancingHttpClient.class);
+    	// 如果说上面只是为了得到一个符合满足指定应用的对象，那么下面就是为了这个负载做处理
+    	
 		client.setLoadBalancer(this.clientFactory.getLoadBalancer(serviceId));
 
 		return new HttpClientRibbonCommand(serviceId, client, context, zuulProperties, zuulFallbackProvider,
@@ -843,17 +866,31 @@ public HttpClientRibbonCommand create(final RibbonCommandContext context) {
 	}
 ```
 
-clientFactory : 默认实现类`SpringClientFactory` 这个类是`org.springframework.cloud.netflix.ribbon`中的继承了`NamedContextFactory`类，大概意思就是根据名称获取对象。而这里的名称指的是serviceId，也就是application名称
-
-
+clientFactory : 默认实现类`SpringClientFactory` 这个类是`org.springframework.cloud.netflix.ribbon`中的继承了`NamedContextFactory`类，大概意思就是根据名称获取对象。而这里的名称指的是serviceId，也就是application名称。其实就是一个专属ribbon的工厂类，主要作用就是能够通过serviceId就能够从工厂中拿到RibbonLoadBalancingHttpClient对象
 
 这里只需要看下里面的内容是如何被创建的。
 
 **FeignClientFactoryBean**
 
+`RibbonApplicationContextInitializer` : 监听类，这个类的主要作用就是刷新应用。不必在第一次访问的时候再加载，入口类`RibbonAutoConfiguration`的**ribbonApplicationContextInitializer**方法。
 
+> 如果配置文件中指定了ribbon.eager-load.enabled=true，并且ribbon.eager-load.clients=serviceId1,serviceId2。
+>
+> 这里就表示从RibbonAutoConfiguration中触发直接初始化client的方法。如果没有指定的话，就只能在第一次访问的时候触发NamedContextFactory的createContext方法去刷新这个工厂中的对象
 
+如何捕捉到Eureka上面的服务地址的?
 
+`ILoadBalancer` :  统一的负载均衡接口
+
+`ZoneAwareLoadBalancer`： 默认的接口实现
+
+`RibbonClientConfiguration` : 负载均衡客户端配置。
+
+`RibbonEurekaAutoConfiguration`.`ribbonServerList`
+
+`CloudEurekaClient` : DiscoveryClient.getInstancesByVipAddress 获取服务列表
+
+`EurekaClientAutoConfiguration`： 初始化Eureka配置
 
 
 

@@ -67,7 +67,7 @@ GC分代的基本假设：绝大部分对象的生命周期都非常短暂，存
 
 ### 垃圾收集器
 
-​     如果说收集算法是内存回收的方法论，垃圾收集器就是内存回收的具体实现
+     如果说收集算法是内存回收的方法论，垃圾收集器就是内存回收的具体实现
 
  
 
@@ -92,8 +92,6 @@ ParNew收集器其实就是Serial收集器的多线程版本。新生代并行�
 参数控制：-XX:+UseParNewGC  ParNew收集器
 
 -XX:ParallelGCThreads 限制线程数量
-
- 
 
 ![image.png](http://upload-images.jianshu.io/upload_images/6370985-cd84d1ab1e7b2e6e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
@@ -129,7 +127,7 @@ CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时�
 
  其中初始标记、重新标记这两个步骤仍然需要“Stop The World”。初始标记仅仅只是标记一下GC Roots能直接关联到的对象，速度很快，并发标记阶段就是进行GC Roots Tracing的过程，而重新标记阶段则是为了修正并发标记期间，因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录，这个阶段的停顿时间一般会比初始标记阶段稍长一些，但远比并发标记的时间短。 
 
-​      由于整个过程中耗时最长的并发标记和并发清除过程中，收集器线程都可以与用户线程一起工作，所以总体上来说，CMS收集器的内存回收过程是与用户线程一起并发地执行。老年代收集器（新生代使用ParNew）
+      由于整个过程中耗时最长的并发标记和并发清除过程中，收集器线程都可以与用户线程一起工作，所以总体上来说，CMS收集器的内存回收过程是与用户线程一起并发地执行。老年代收集器（新生代使用ParNew）
 
   优点:并发收集、低停顿 
 
@@ -137,15 +135,15 @@ CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时�
 
    参数控制：-XX:+UseConcMarkSweepGC  使用CMS收集器
 
-​             -XX:+ UseCMSCompactAtFullCollection Full GC后，进行一次碎片整理；整理过程是独占的，会引起停顿时间变长
+             -XX:+ UseCMSCompactAtFullCollection Full GC后，进行一次碎片整理；整理过程是独占的，会引起停顿时间变长
 
-​            -XX:+CMSFullGCsBeforeCompaction  设置进行几次Full GC后，进行一次碎片整理
+            -XX:+CMSFullGCsBeforeCompaction  设置进行几次Full GC后，进行一次碎片整理
 
-​            -XX:ParallelCMSThreads  设定CMS的线程数量（一般情况约等于可用CPU数量）
+            -XX:ParallelCMSThreads  设定CMS的线程数量（一般情况约等于可用CPU数量）
 
 ![image.png](http://upload-images.jianshu.io/upload_images/6370985-b694b3898fdda9d4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-​         
+         
 
 #### G1收集器
 
