@@ -121,3 +121,67 @@ Jmockdta是一款实现模拟JAVA类型或对象的实例化并随机初始化�
 [proxyee-down](https://github.com/proxyee-down-org/proxyee-down)
 
 使用本地http代理服务器方式嗅探下载请求，支持所有操作系统和大部分主流浏览器,支持分段下载和断点下载。
+
+
+
+### 大公司的github地址
+
+#### 美团 : https://github.com/meituan/ 
+
+https://github.com/meituan-dianping  最新地址 
+
+#### 阿里巴巴: https://github.com/alibaba
+
+#### 携程 : https://github.com/ctripcorp
+
+#### 搜狐 : https://github.com/sohutv 
+
+#### 大众点评 : https://github.com/dianping
+
+# linux
+
+- redis的运维监控工具 - https://github.com/sohutv/cachecloud/
+- inception [sql审查] - https://github.com/mysql-inception/inception
+- archer (基于inception实现的web版)- https://github.com/jly8866/archer 
+- greys-anatomy[线上问题排查] : https://github.com/oldmanpushcart/greys-anatomy
+
+### 缓存自动注入框架
+
+#### https://github.com/qiujiayu/AutoLoadCache
+
+基于spring管理缓存(redis,Map等等)
+
+### 日志收集框架
+
+#### cat 
+
+##### https://github.com/dianping/cat
+
+CAT基于Java开发的实时应用监控平台，包括实时应用监控，业务监控.
+
+### 定时任务平台
+
+#### https://github.com/xuxueli/xxl-job 
+
+XXL-JOB是一个轻量级分布式任务调度框架，其核心设计目标是开发迅速、学习简单、轻量级、易扩展。现已开放源代码并接入多家公司线上产品线，开箱即用。
+
+### 学习项目
+
+#### spring-boot
+
+##### 云收藏
+
+https://github.com/cloudfavorites/favorites-web
+
+### 代理模式
+
+- https://github.com/iluwatar/java-design-patterns
+- https://github.com/julycoding/The-Art-Of-Programming-By-July/blob/master/ebook/zh/一致性哈希算法.md
+
+## 分布式配置管理
+
+https://github.com/knightliao/disconf
+
+# 工具类
+
+https://github.com/vipshop/vjtools
