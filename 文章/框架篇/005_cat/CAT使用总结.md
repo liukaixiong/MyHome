@@ -66,7 +66,7 @@
          </distributionManagement>
       ```
 
-      ​	执行:`mvn clean package deploy -Dmaven.test.skip=true`
+      	执行:`mvn clean package deploy -Dmaven.test.skip=true`
 
       2. 客户端的服务
 
@@ -171,6 +171,30 @@ StartedThread : 已经使用过的线程数
 
    **如果出现非常多的话**-> **如果是tomcat部署的话一定要记得查看是否是不是停止的时候进程没有删完毕** [ **ps -ef|grep tomcat** ] + **是不是端口出现了问题，比如端口是2281写成了2181 也是会出问题的。**
 
+3. 如果使用IDEA并且内置自己的tomcat的时候，**LogViews**出现乱码：
+
+   1. VM options : -Dfile.encoding=UTF-8   // 设置编码格式
+   2. 另外D:\dev\IntelliJ IDEA 2018.1.3\bin\idea.exe.vmoptions 最后一行加入 : -Dfile.encoding=UTF-8
+
+4. 单机 - 版本升级到3.0的时候，发现历史报表无法显示内容？
+
+   1. 首先进入cat管理后台的config - 全局系统配置 - 服务端配置 - 然后更新 job-machine = true 。
+
+   2. 这里需要了解一点:
+
+      1. CAT在选择task任务机的时候会判断上面的属性是否为true，如果为true表示这条机器是报告工作机
+
+      2. 报告机的特点就是会在启动的时候创建一个独立的任务消费线程去处理。代码在CatHomeModule.execute中
+
+         ```java
+         if (serverConfigManager.isJobMachine()) {
+             DefaultTaskConsumer taskConsumer = ctx.lookup(DefaultTaskConsumer.class);
+             Threads.forGroup("cat").start(taskConsumer);
+         }
+         ```
+
+      也就是说在**启动**的时候会判断该属性是否为true，为true的话则会开启线程，你更改了属性的同时，记得要重启服务，不然不会生效，因为它是在启动的时候触发这个任务线程的。
+
 
 ### 源码笔记
 
@@ -205,4 +229,14 @@ StartedThread : 已经使用过的线程数
 
 
 `CatHomeModule`: Cat的环境配置文件具体执行类
+
+## CAT数据库中需要定时清理的大表
+
+`daily_report_content` : 天报表二进制内容
+
+`graph` : 小时图表曲线
+
+`report` : 存放实时报表信息
+
+`report_content` : 小时报表二进制内容
 
