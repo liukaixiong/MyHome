@@ -69,20 +69,6 @@ public void init(ServletConfig config) throws ServletException {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## 告警模块
 
 
@@ -479,6 +465,18 @@ CAT默认生成的DAO类简单的只会包含增删改查，特别基础的。
 ```
 
 > 这里有个比较坑的地方，如果你在Handle中注入了某个类，但是启动的时候说某个类创建失败，那么你就需要自己去分析这个类里面注入的属性是否都在components.xml中定义过，如果是路径写错了或者注入的属性类是没有在容器中定义的都会报错，但是报错的提示可能不太清晰，需要自己去反复校验是哪个属性出错了。
+
+
+
+上面关于配置这块最终都会自动生成，可以自己不写，但是如果有新写的service记得去com.dianping.cat.build.report中去找特定的类将该类注入进去，可以自行参考，如果不注入进去则会导致自动生成的代码覆盖掉。
+
+
+
+远程CAT查找报表数据
+
+`com.dianping.cat.report.page.model`
+
+
 
 # 异常总结 : 
 

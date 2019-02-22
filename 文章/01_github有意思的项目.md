@@ -1,9 +1,5 @@
 # 记录一些Github上面有趣的项目地址
 
-ffff
-
-
-
 ## 设计模式
 
 ### [Java设计模式](https://github.com/iluwatar/java-design-patterns)
@@ -38,15 +34,9 @@ JavaPoet是square推出的开源java代码生成框架，提供Java Api生成.ja
 
 ### [27天成为java大神](https://github.com/DuGuQiuBai/Java)
 
-
-
-
-
 ### [APIJSON](https://github.com/TommyLemon/APIJSON)
 
 待研究
-
-
 
 ### [javamelody](https://github.com/javamelody/javamelody)
 
@@ -194,9 +184,24 @@ https://github.com/vipshop/vjtools
 
 [proxyee-down](https://github.com/proxyee-down-org/proxyee-down)
 
+
+
 # 面试
 
 [涵盖面非常广泛](https://github.com/Snailclimb/JavaGuide)
 
 [算法](https://github.com/kdn251/interviews)
 
+## Windows
+
+
+
+[uTools](https://u.tools/) : uTools是一个极简、插件化、跨平台的现代化桌面软件。通过自由选配丰富的插件，打造你得心应手的工具集合
+
+当你熟悉它后，能够为你节约大量时间，让你可以更加专注地改变世界
+
+可以非常好的代替Eventhing
+
+
+
+community

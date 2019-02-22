@@ -2,7 +2,7 @@
 
 需要关注的几个点：
     1. 切入点和通知是如何去注册的？(后续补充)
-    2. 代理过程中是如何植入这些拦截的？
+        2. 代理过程中是如何植入这些拦截的？
 
 # 布置场景
 log 日志切入点实现类
@@ -72,7 +72,7 @@ public class LogAspect {
 ### 处理流程
 我们先看下代理中做了些啥事?
 1. 直接debug打到transactionalService.testQuery();看处理的代理是个什么样子的类
-  **CglibAopProxy.class** :  这是一个Cglib代理的类,具体看他的拦截方法
+    **CglibAopProxy.class** :  这是一个Cglib代理的类,具体看他的拦截方法
 ```java
 @Override
 		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
@@ -128,15 +128,16 @@ public class LogAspect {
 CglibMethodInvocation类的结构
 ![CglibMethodInvocation类结构](http://upload-images.jianshu.io/upload_images/6370985-69a005b4b9b4b745.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-```
+```java
  new CglibMethodInvocation(proxy, target, method, args, targetClass, chain, methodProxy).proceed();
 ```
 CglibMethodInvocation的process()方法其实是委托父类去执行的 也就是ReflectiveMethodInvocation
 
 
 
-ReflectiveMethodInvocation类
+`ReflectiveMethodInvocation`类
 // 这里只列举关键方法,因为上面已经拿到了代理的chain
+
 ```java
 public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Cloneable {
          // 拦截器列表 里面包装的都是advised
@@ -218,9 +219,9 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 ```
 我们看下具体的advised对象
 
-- AfterReturningAdviceInterceptor - 目标方法之后执行
-- MethodBeforeAdviceInterceptor - 目标方法执行
-  其实这两个方法实现方式是差不多的,都实现了MethodInterceptor接口,只是切入点执行的顺序上做了调整而已
+- `AfterReturningAdviceInterceptor` - 目标方法之后执行
+- `MethodBeforeAdviceInterceptor` - 目标方法执行
+  其实这两个方法实现方式是差不多的,都实现了`MethodInterceptor`接口,只是切入点执行的顺序上做了调整而已
 ```java
 public class AfterReturningAdviceInterceptor implements MethodInterceptor, AfterAdvice, Serializable {
 
@@ -270,8 +271,8 @@ public class MethodBeforeAdviceInterceptor implements MethodInterceptor, Seriali
 
 **梳理一下:**
     1. 通过Cglib代理拿到具体的代理的对象(**CglibAopProxy**)
-    2. 在Cglib中的拦截(intercept)处理中,先获取所有切入点的对象(chain)并且构建了一个责任链类(**CglibMethodInvocation**),这个责任链类(**实际执行过程类:ReflectiveMethodInvocation**)包含了所有拦截链(advised集合)对象
-    3. 通过这个责任链类开始递归下面所有的拦截类去执行每个advised方法
-    4. 执行完所有advised链条方法之后,会到达这个最终的目标方法**CglibMethodInvocation.invokeJoinpoint()**.调用方法这部分都是通过反射去执行的。
-    5. 如果被代理的方法不是public类型的则会在反射的时候设置setAccessible为true,破坏了对象封装属性强制调用!
+        2. 在Cglib中的拦截(intercept)处理中,先获取所有切入点的对象(chain)并且构建了一个责任链类(**`CglibMethodInvocation`**),这个责任链类(**实际执行过程类:`ReflectiveMethodInvocation`**)包含了所有拦截链(advised集合)对象
+        3. 通过这个责任链类开始递归下面所有的拦截类去执行每个advised方法
+        4. 执行完所有advised链条方法之后,会到达这个最终的目标方法**CglibMethodInvocation.invokeJoinpoint()**.调用方法这部分都是通过反射去执行的。
+        5. 如果被代理的方法不是public类型的则会在反射的时候设置setAccessible为true,破坏了对象封装属性强制调用!
 
