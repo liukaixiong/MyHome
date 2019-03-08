@@ -1,4 +1,4 @@
-# BeanDefinition
+# 了解Spring之BeanDefinition对象
 
 - 首先我们需要了解`BeanDefinition`到底是个什么东西?
 - 了解Spring基于`BeanDifination`对象做了哪些实现？
@@ -81,11 +81,11 @@ public Set<BeanDefinition> findCandidateComponents(String basePackage) {
 
 分析链路(只选举关键链路):
 
-`invokeBeanDefinitionRegistryPostProcessors`:  执行Bean中实现了`BeanDefinitionRegistryPostProcessor`的类的`postProcessBeanDefinitionRegistry`方法，目标类可以看到是:`ConfigurationClassPostProcessor`
+invokeBeanDefinitionRegistryPostProcessors: 执行Bean中实现了`BeanDefinitionRegistryPostProcessor`的类的`postProcessBeanDefinitionRegistry`方法，目标类可以看到是:`ConfigurationClassPostProcessor`
 
-`processConfigBeanDefinitions` : 断点在循环遍历Bean的时候，会去判断Bean上面的注解。
+processConfigBeanDefinitions: 断点在循环遍历Bean的时候，会去判断Bean上面的注解。
 
-如果包含有`@Import`、@Configuration等注解，则会采用
+如果包含有`@Import`、`@Configuration`等注解，则会采用
 
 这里可以大概知道`GenericBeanDefinition`、`AnnotatedGenericBeanDefinition`、`ScannedGenericBeanDefinition`等类都是针对配置类型的Bean定义。
 
@@ -99,7 +99,7 @@ public Set<BeanDefinition> findCandidateComponents(String basePackage) {
 
 **AbstractBeanFactory.java**
 
-```java
+```source-java
 // 创建Bean的时候触发
 protected <T> T doGetBean(
 			final String name, final Class<T> requiredType, final Object[] args, boolean typeCheckOnly)
@@ -108,14 +108,14 @@ protected <T> T doGetBean(
 		final String beanName = transformedBeanName(name);
 		Object bean;
 		// 部分省略
-	 
+
         final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
         checkMergedBeanDefinition(mbd, beanName, args);
 
         // Guarantee initialization of beans that the current bean depends on.
         String[] dependsOn = mbd.getDependsOn();
         if (dependsOn != null) {
-            
+
         } 
         // Create bean instance.
         if (mbd.isSingleton()) {
@@ -133,13 +133,11 @@ protected <T> T doGetBean(
 
 ```
 
-
-
 其实我的理解就是描述了Bean的对象，方便在实例化的时候做一些特殊操作。比如@Autowired等注解。
 
 `BeanDefinition`也有对应的拓展点: `BeanDefinitionRegistryPostProcessor`
 
-举个常用的案例:Mybatis
+举个常用的案例:**Mybatis**
 
 大家都知道`Mybatis`的`Mapper`是不需要实现类的，只需要定义一个接口就行了，但是它是如何通过Spring拿到对应的实现的呢？
 
@@ -147,21 +145,74 @@ protected <T> T doGetBean(
 
 `BeanPostProcess`、`BeanDefinitionRegistryPostProcessor`.
 
-`BeanPostProcess`: 针对每个bean的实例化之前和之后会触发。
+**BeanPostProcess**: 针对每个bean的实例化之前和之后会触发。
 
-`BeanDefinitionRegistryPostProcessor` : 发生的比上面要早，在bean还处于`BeanDefinition`加载完毕之后的阶段。
+**BeanDefinitionRegistryPostProcessor** : 发生的比上面要早，在bean还处于`BeanDefinition`加载完毕之后的阶段。
 
 Mybatis就是基于这个时机通过`MapperScannerConfigurer`触发了`BeanDefinitionRegistryPostProcessor`的`postProcessBeanDefinitionRegistry`方法的调用。
+```java
+// MapperScannerConfigurer
+public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+    if (this.processPropertyPlaceHolders) {
+      processPropertyPlaceHolders();
+    }
+    ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
+    scanner.setAddToConfig(this.addToConfig);
+    scanner.setAnnotationClass(this.annotationClass);
+    scanner.setMarkerInterface(this.markerInterface);
+    scanner.setSqlSessionFactory(this.sqlSessionFactory);
+    scanner.setSqlSessionTemplate(this.sqlSessionTemplate);
+    scanner.setSqlSessionFactoryBeanName(this.sqlSessionFactoryBeanName);
+    scanner.setSqlSessionTemplateBeanName(this.sqlSessionTemplateBeanName);
+    scanner.setResourceLoader(this.applicationContext);
+    scanner.setBeanNameGenerator(this.nameGenerator);
+    scanner.registerFilters();
+    // 扫描包 ， 会触发下面的doScan方法
+    scanner.scan(StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
+  }
+```
 
 这个时候需要告诉Mybatis你的`basePackage`、`sqlSessionFactory`、`sqlSessionTemplate`等等属性，
 
-- 要扫描的包
-- 配置文件解析对象
-- SQL执行对象
+*   要扫描的包
+*   配置文件解析对象
+*   SQL执行对象
 
 有了这三个功能基本上已经具备了执行SQL的条件。
 
 这时候MapperScannerConfigurer需要为扫描包下面的接口指定一个具体实现`MapperFactoryBean`。不然这个构建的BeanDefinition是没有用的。
+> 这里在ClassPathMapperScanner的doScan中体现
+```java
+// 这里会在上面的scan方法被回调
+public Set<BeanDefinitionHolder> doScan(String... basePackages) {
+    Set<BeanDefinitionHolder> beanDefinitions = super.doScan(basePackages);
+
+    if (beanDefinitions.isEmpty()) {
+      logger.warn("No MyBatis mapper was found in '" + Arrays.toString(basePackages) + "' package. Please check your configuration.");
+    } else {
+      for (BeanDefinitionHolder holder : beanDefinitions) {
+        GenericBeanDefinition definition = (GenericBeanDefinition) holder.getBeanDefinition();
+       // 为对象属性赋值
+        definition.getPropertyValues().add("mapperInterface", definition.getBeanClassName());
+        // 指定具体的实现
+        definition.setBeanClass(MapperFactoryBean.class); 
+        definition.getPropertyValues().add("addToConfig", this.addToConfig); 
+        boolean explicitFactoryUsed = false;
+        if (StringUtils.hasText(this.sqlSessionFactoryBeanName)) {
+          definition.getPropertyValues().add("sqlSessionFactory", new RuntimeBeanReference(this.sqlSessionFactoryBeanName));
+          explicitFactoryUsed = true;
+        } else if (this.sqlSessionFactory != null) {
+          definition.getPropertyValues().add("sqlSessionFactory", this.sqlSessionFactory);
+          explicitFactoryUsed = true;
+        } 
+        if (StringUtils.hasText(this.sqlSessionTemplateBeanName)) {
+          if (explicitFactoryUsed) {
+            logger.warn("Cannot use both: sqlSessionTemplate and sqlSessionFactory together. sqlSessionFactory is ignored.");
+          }
+          definition.getPropertyValues().add("sqlSessionTemplate", new RuntimeBeanReference(this.sqlSessionTemplateBeanName)); 
+    return beanDefinitions;
+  }
+```
 
 指定了具体实现之后将上面三个关键属性交给`MapperFactoryBean`管理。
 
@@ -171,13 +222,4 @@ Mybatis就是基于这个时机通过`MapperScannerConfigurer`触发了`BeanDefi
 
 后面都是些细节的执行过程就不细究了，比如通过接口的包+类名+方法名和xml中的对象相对应得到具体的执行SQL。
 
-
-
 以上是仅从个人观点，希望会给大家带来一些帮助。有问题请及时指正。
-
-
-
-
-
-
-
