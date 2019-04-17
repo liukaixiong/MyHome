@@ -21,10 +21,6 @@ AbstractBrokerMessageHandler  : 多线程流程转发控制器
 
 
 
-
-
-
-
 ## 架构描述
 
 ### Broker
@@ -47,11 +43,11 @@ AbstractBrokerMessageHandler  : 多线程流程转发控制器
 
 ##### UserDestinationMessageHandler
 
-点对点消息发送的处理程序，将路径为/user的对象解析成点对点参数
+点对点消息发送的处理程序，将路径为`/user`的对象解析成点对点参数
 
 例如 : /user/userid-5/topic/xxx 
 
-解析成 /user/topic/xxx 只是为了找到订阅了该路由的所有用户
+解析成 `/user/topic/xxx` 只是为了找到订阅了该路由的所有用户
 
 解析成 /topic/xxx-userid-5 最终这条消息的发送地址，为了能够让SimpleBrokerMessageHandler接收到。
 
@@ -129,12 +125,6 @@ SendTask:
 
 从上面可以看到每个拦截器其实都拥有消息发送的功能，针对每条消息都能够做完处理之后执行特定的逻辑。
 
-
-
-
-
-
-
 #### AbstractMessageChannel
 
 ![1544436914552](D:\github\MyHome\文章\框架篇\010_SpringCloud\assets\1544436914552.png)
@@ -188,16 +178,6 @@ public boolean sendInternal(Message<?> message, long timeout) {
 拥有了父类的发送接口功能之外，还封装了消息的订阅以及取消订阅。通过一个Set容器来封装MessageHandler对象
 
 而这个对象则是每个消息都要处理的对象，非常关键
-
-
-
-
-
-
-
-
-
-
 
 ### 处理流程
 

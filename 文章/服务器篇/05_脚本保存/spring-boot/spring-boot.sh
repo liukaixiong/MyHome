@@ -4,7 +4,7 @@
 # description: Starts and stops the App.
 # author:vakinge
 
-ENV=com
+ENV=test
 RUNNING_USER=root
 ADATE=`date +%Y%m%d%H%M%S`
 APP_NAME=$1
@@ -24,7 +24,8 @@ else
 fi
 
 if [ ! -d "$APP_HOME/logs" ];then
-  mkdir $APP_HOME/logs
+  mkdir -p $APP_HOME/logs/start-logs
+  echo "开始创建文件夹 : $APP_HOME/logs/start-logs"
 fi
 
 LOG_PATH=$APP_HOME/logs/start-logs/$APP_NAME-start.log
@@ -32,7 +33,7 @@ GC_LOG_PATH=$APP_HOME/logs/start-logs/gc-$APP_NAME-$ADATE.log
 #JMX监控需用到
 JMX="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1091 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
 #JVM参数
-JVM_OPTS="-Dname=$APP_NAME -Dspring.profiles.active=$ENV -Duser.timezone=Asia/Shanghai -Xms1280m -Xmx1280m -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps -Xloggc:$GC_LOG_PATH -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
+JVM_OPTS="-Dname=$APP_NAME -Dspring.profiles.active=$ENV -Duser.timezone=Asia/Shanghai -Xms1024m -Xmx1024m -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps -Xloggc:$GC_LOG_PATH -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
 
 JAR_FILE=$APP_NAME
 pid=0
