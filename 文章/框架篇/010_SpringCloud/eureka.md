@@ -104,3 +104,67 @@ spring.application.name=spring-cloud-producer
 
 [参考链接](http://www.ityouknow.com/springcloud/2017/05/12/eureka-provider-constomer.html)
 
+
+
+
+
+
+
+## eureka 配置介绍
+
+### 服务端
+
+**EurekaInstanceConfigBean**:
+
+```properties
+# 分组名称
+setAppGroupName
+# 应用名称 默认获取环境变量spring.application.name中的值
+setAppname
+# ASG的名称
+setASGName
+# 数据中心 这里包括Netflix、Amazon、MyOwn
+setDataCenterInfo
+# 设置默认的地址解析顺序
+setDefaultAddressResolutionOrder
+# 设置健康心跳检查URL 相对地址
+setHealthCheckUrl
+# 绝对地址
+setHealthCheckUrlPath
+# 主页地址
+setHomePageUrl
+# 主页绝对地址
+setHomePageUrlPath
+# 主机信息
+setHostInfo
+# 主机名称
+setHostname
+# 
+setInetUtils
+setInitialStatus
+setInstanceEnabledOnit
+setInstanceId
+setIpAddress
+# Eureka服务器在接收到实例的最后一次发出的心跳后，需要等待多久才可以将此实例删除，默认为90秒
+setLeaseExpirationDurationInSeconds
+eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着,默认为30 秒
+setLeaseRenewalIntervalInSeconds
+setMetadataMap
+setNamespace
+setNonSecurePort
+setNonSecurePortEnabled
+setPreferIpAddress
+# 安全心跳检测
+setSecureHealthCheckUrl
+setSecurePort
+setSecurePortEnabled
+# 安全虚拟机的名称 默认获取环境变量spring.application.name中的值
+setSecureVirtualHostName
+setStatusPageUrl
+setStatusPageUrlPath
+# 安全虚拟机的名称 默认获取环境变量spring.application.name中的值
+setVirtualHostName
+```
+
+
+
