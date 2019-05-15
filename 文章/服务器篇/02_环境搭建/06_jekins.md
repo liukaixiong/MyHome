@@ -59,6 +59,8 @@ rebuild : 根据上一次的参数重新编译
 
 Hidden Parameter : 隐藏参数
 
+Active Choices: 参数联动的插件
+
 # 异常记录
 
 ### 1. Last unit does not have enough valid bits
@@ -120,3 +122,12 @@ http://localhost:8080/jenkins/job/test2/buildWithParameters?token=asd
 系统设置 - **全局属性** - 环境变量
 
 这里设置变量全局通用。
+
+
+
+## Jeknins批量修改配置
+
+[参考配置](http://www.cnblogs.com/zhaijing/p/8391558.html)
+
+ 思路: jenkins的job配置是存在一个本地的config.xml文件中的，通过动态的修改这个本地的配置文件，来完成批量的修改。
+
