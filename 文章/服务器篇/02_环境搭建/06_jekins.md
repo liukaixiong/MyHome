@@ -61,6 +61,8 @@ Hidden Parameter : 隐藏参数
 
 Active Choices: 参数联动的插件
 
+Zentimestamp  : 获取日期时间戳变量 [系统管理---->系统设置---->全局属性]
+
 # 异常记录
 
 ### 1. Last unit does not have enough valid bits

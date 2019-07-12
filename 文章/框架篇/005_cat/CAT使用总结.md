@@ -8,7 +8,7 @@
    https://github.com/dianping/cat.git
    ```
 
-   ​
+   
 
 2. 编译源码
 
@@ -194,6 +194,8 @@ StartedThread : 已经使用过的线程数
          ```
 
       也就是说在**启动**的时候会判断该属性是否为true，为true的话则会开启线程，你更改了属性的同时，记得要重启服务，不然不会生效，因为它是在启动的时候触发这个任务线程的。
+
+5. Unable to get instance of Logger, please make sure the environment was setup correctly!
 
 
 ### 源码笔记

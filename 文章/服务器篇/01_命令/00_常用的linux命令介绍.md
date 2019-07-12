@@ -1,3 +1,5 @@
+
+
 # 常用的linux配置
 
 ## linux查看history历史记录显示执行时间
