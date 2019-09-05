@@ -1,4 +1,5 @@
 ## Spring的事物是如何运作的?
+
 > 首先带着问题看源码:
 -   Spring的事物是通过哪些原理实现的?
 -   Spring的事物机制是如何提交和回滚的?
@@ -68,8 +69,8 @@ String xml[] = new String[]{"applicationContext-service.xml", "applicationContex
 
 
 1. debug断点打在 demoService.testTransactional(); 这块,然后F5进去
-  ![image](http://upload-images.jianshu.io/upload_images/6370985-7470d7262e7b3521.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-  进入到的是一个CglibAopProxy内部类**DynamicAdvisedInterceptor**的**intercept**方法,从这里看的话,其实这个类就是一个责任链类型的处理类
+    ![image](http://upload-images.jianshu.io/upload_images/6370985-7470d7262e7b3521.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+    进入到的是一个CglibAopProxy内部类**DynamicAdvisedInterceptor**的**intercept**方法,从这里看的话,其实这个类就是一个责任链类型的处理类
 
 > 注意这一块是一个**责任链模式**,表示需要经过一系列链条之后才会到达最终的方法,**当然这三个类切入点类型的类,是通过动态代理加入到责任链中的,下面初始化的时候会讲到**
 ```java
@@ -583,9 +584,9 @@ private Callback[] getCallbacks(Class<?> rootClass) throws Exception {
 
 
 	1.首先开始初始化配置文件
-
+	
 	2.然后执行到<context:component-scan base-package="com.service"></context:component-scan>这里时,会开始扫描注解
-
+	
 	3.当循环扫描到ServiceImpl的时候,会扫描每个方法,经过getAdvicesAndAdvisorsForBean这个方法时会判断每个方法是否触发代理的条件, 怎么触发代理条件, 这里以事物为例:
 	<!--
 	这里注册了一个事物管理器,也就是说每个类都会经过这个事物管理器判断,是否有@Transactional方法;

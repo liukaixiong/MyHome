@@ -19,3 +19,17 @@
 https://github.com/oldratlee/useful-scripts/blob/master/docs/java.md#beer-show-busy-java-threadssh
 
 https://github.com/aqzt/kjyw
+
+
+
+
+
+
+
+
+
+## linux
+
+### 查看当前CPU消耗排行
+
+ps -aux | sort -rnk 3 | head -20

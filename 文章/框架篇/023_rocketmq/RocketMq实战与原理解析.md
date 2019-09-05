@@ -521,3 +521,172 @@ rokcetMQ为了提高性能,会尽可能的保证磁盘的顺序写。
 
 通常会设置成异步复制。性能好，数据不丢。
 
+# 6. 可靠性优先的使用场景
+
+
+
+## 动态增减NameServer
+
+通过HTTP服务来设置，默认URL : http://jmenv.tbsite.net: 8080/rocketmq/nsaddr.
+
+通过rocketmq.namesrv.domain参数来覆盖jmenv.tbsite.net
+
+通过rocketmq.namesrv.domain.subgroup参数来覆盖nsaddr
+
+这种方式无需重启，组件每隔2分钟请求一次该URL，获取最新的NameServer地址。
+
+## 动态增减broker
+
+如果是新增的话，会首先查看注册中心的列表，均衡利用资源，另一种方式是通过updateTopic命令更改现有的topic配置，在新加的Broker上创建新的队列。
+
+```shell
+sh ./bin/mqadmin updateTopic -b 192.168.0.1:10911 -t TestTopic -n 192.168.0.100:9876
+```
+
+结果是在新增的Broker机器上为TestTopic新创建了8个读写队列。
+
+如果是减少Broker，如果producer使用的同步发送,在DefaultMQProducer内部有个重试逻辑，其中一个Broker停了，会自动向另一个Broker发消息，不会发生丢消息的现象，如果是异步方式发送或者单向消息发送会丢失切换过程中的消息。
+
+## 故障消息的影响
+
+1. Broker正常关闭，启动
+
+数据不会丢失，master挂了，会有slave顶上。生产消费不受影响
+
+1. broker异常Crash，然后启动
+2. OS Crash 重启
+3. 机器断电，但能马上恢复
+4. 磁盘损坏
+5. CPU、主板、内存等关键设备损坏。
+
+第2、3、4属于软件故障，内存的数据可能会丢失，这个也根据刷盘策略的不同，造成的影响不同，如果是同步刷盘策略可以达到和第一种情况相同。如果是异步刷盘存在数据丢失的情况。
+
+第5、6点属于硬件故障，挂的那台磁盘丢失，如果是M-S配置，消息会复制到Slave不会丢失，但如果是异步复制的话，两次Sync的消息会丢失
+
+总的来说最可靠稳定的设置方式:
+
+1. 多Master，每个Master带有Slave
+2. 主从之间设置为SYNC_MASTER
+3. Producer用同步方式写;
+4. 刷盘策略设置冲SYNC_FLUSH.
+
+可以消除单点依赖，即使某台机器出现极端故障也不会丢失消息。
+
+## 消息的优先级
+
+### **拆分不同的topic来处理不同级别的消息**
+
+如果有三类消息，A类消息特别多和大，处理速度比较慢的时候B、C类消息会在等候处理，这个时候如果有少量A类消息加入就会排在B、C类消息后面，需要等待很长的时间才能被等候处理。如果A类消息要被及时处理，可以把这三种类型的消息拆分成两个topic。A类消息独立的topic，BC类消息一个topic。
+
+创建两个消费者，分别订阅不同的topic，这样A\B、C类消息互不影响。
+
+### **通过增加MessageQueue的数量来达到消费消息公平的效果**
+
+一个订单系统接收100家快递门店过来的请求，把这些请求通过producer写入RocketMQ；订单处理程序通过consumer从队列里读取消息并处理，**每天最多处理1万单。**
+
+如果这100个快递门店中某个门店做活动，单子特别多。一上午就发出了2万单消息，这样99家门店可能得需要等这家门店的单子处理完，这个时候每天1W单的话就是后台才能被处理到，不太公平。
+
+可以创建一个topic，**设置topic的MessageQueue数量超过100个，producer根据订单的门店号把每个店的单子发送到各自的MessageQueue中。消费者默认采用循环的方式逐个读取一个topic的所有MessageQueue。**这样如果某家门店订单量大增，这家门店对应的MessageQueue消息数增多，等待时间增长也不会造成其他门店都在等待这一个门店的单子处理情况。
+
+另外DefaultMQPushConsumer默认的pullBatchSize是32，也就是每次从某个MessageQueue读取消息的时候最多可以读32个。**如果在上面的场景中为了更加公平可以设置成1个。**
+
+### 消费者自主控制消息的遍历
+
+应用程序有A\B\C三类优先级的消息，如果在同一个Topic中，消费者在遍历的时候可以使用PullConsumer，自主控制MQ的遍历以及消息的读取；
+
+如果是在三个topic下，需要启动三个Consumer,实现逻辑控制三个consumer消费.
+
+
+
+# 7. 吞吐量优先的场景
+
+## 提高消费者的处理能力
+
+### 一 . 提高消费者并行度。
+
+##### 增加消费者
+
+其实就是增加同一个组的内的消费者，把消息均衡处理掉。
+
+**需要注意的是: 消费者数量不要超过topic下Read Queue数量，超过的Consumer实例接收不到消息。**
+
+##### 提高处理线程数
+
+其次就是提高单个Consumer实例中的并行处理线程数，可以在同一个Consumer内增加并行度来提高吞吐量。【设置方式是修改consumer.setConsumeThreadMin和consumer.setConsumeThreadMax】
+
+### 二. 以批量的方式进行消费
+
+某些业务的场景下，多条消息同时处理的时间会大大小于逐个处理都是时间总和，比如批量修改10条数据比一次次修改10条数据会快。
+
+实现方式是通过设置consumer.setConsumeMessageBatchMaxSize这个参数，默认是1
+
+### 三. 检测延时情况，跳过非重要消息
+
+由于某种原因，消息发生严重的堆积，短时间内无法消除堆积，这个时候可以选择丢弃不重要的消息，使consumer尽快追上producer的进度。
+
+![1563939815559](D:\github\MyHome\文章\框架篇\023_rocketmq\RocketMq实战与原理解析.assets\1563939815559.png)
+
+当某个队列的消息堆积达到9W以上，就直接丢弃，以便追上发送消息的进度。
+
+
+
+## Consumer的负载均衡
+
+### DefaultMQPushConsumer的负载均衡
+
+默认的结果是Topic的MessageQueue数量以及ConsumerGroup的Consumer的数量有关，负载均衡的粒度直到MessageQueue,把topic下的所有Message Queue分配到不同的Consuer中，所以Message Queue和Consumer的数量关系，或者整除关系影响负载均衡的结果。
+
+例如MQ的数设置为3，ConsumerGroup的Consumer为2，那么其中一个消费者需要消费3/2的消息，另一个处理3/1的消息；当consumer数量为4的时候，有一个Consumer无法收到消息，其他3个各处理三分之一的消息。
+
+> 所以Message Queue的数量设置不宜过小。通常设置为16
+
+### DefaultMQPullConsumer的负载均衡
+
+/// 暂无
+
+
+
+
+
+
+
+## 提高producer的发送速度
+
+### 1. 利用oneway单向消息发送
+
+发送一条消息要经过三部:
+
+1. 客户端发送请求到服务器。
+2. 服务器处理该请求
+3. 服务器向客户端返回应答。
+
+某些场景可以通过Oneway方式发送，也就是不需要第三步。即将数据写入客户端的Socket缓冲区就返回，不等待对方返回结果，用这种方式发消息的耗时可以缩短到微妙级。
+
+### 2. 增加producer的并发量
+
+
+
+## 系统性能调优的一般流程
+
+### top查看CPU和内存使用率
+
+
+
+### 使用sar命令查看网卡使用情况
+
+
+
+### 使用iostat查看磁盘使用情况
+
+
+
+### 上面三者还没达到极限
+
+可能是锁的机制有bug，造成线程阻塞。
+
+通过java 的profiling工具来找出程序的具体问题，比如jvisualvm、jstack、perfJ等。
+
+
+
+
+

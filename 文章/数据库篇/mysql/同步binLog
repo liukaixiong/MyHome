@@ -1,0 +1,32 @@
+# 通过MaxWell实时监听Mysql的Binlog日志
+
+## 安装Mysql
+
+## 开启binLog
+
+1. 查看binlog是否开启
+
+```sql
+show variables like '%log_bin%';
+```
+
+
+
+2. 开启binlog
+
+```shell
+vim /etc/my.cnf
+```
+
+在[mysqld]下新增:
+
+```tex
+server-id=1
+log-bin=master
+binlog_format=row
+```
+
+3. 重启Mysql服务
+
+service mysqld restart
+

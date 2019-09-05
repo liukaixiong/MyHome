@@ -112,4 +112,4 @@ NIO中封住装了7个基本类型的数组
 buffer接口中又有两个关键的方法:capacity、flip
 
 - capacity: 当前组表位置
-- ​
+- 

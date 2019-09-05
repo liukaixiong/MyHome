@@ -1,4 +1,5 @@
 ## 注解区分
+
  1. @Service用于标注业务层组件
  2. @Controller用于标注控制层组件（如struts中的action）
  3. @Repository用于标注数据访问组件，即DAO组件
@@ -524,19 +525,19 @@ protected Object wrapIfNecessary(Object bean, String beanName, Object cacheKey) 
 			}
 		}
 	}
-``` 
+```
 
 6. 如果这个Bean关联了BeanPostProcessor接口，将会调用postProcessBeforeInitialization(Object obj, String s)方法，BeanPostProcessor经常被用作是Bean内容的更改，并且由于这个是在Bean初始化结束时调用After方法，也可用于内存或缓存技术
 ```
     1. initializeBean  
     2. applyBeanPostProcessorsBeforeInitialization
-``` 
+```
 7. 如果这个bean实现了InitializingBean接口,则会调用afterPropertiesSet方法,,如果这个Bean在Spring配置文件中配置了init-method属性会自动调用其配置的初始化方法
 ```
     1. initializeBean  
     2. applyBeanPostProcessorsBeforeInitialization
     3. invokeInitMethods 
-```  
+```
 
 8. 如果这个Bean关联了BeanPostProcessor接口，将会调用postAfterInitialization(Object obj, String s)方法
 ```

@@ -86,7 +86,7 @@ static final class Node {
             else
                 acquire(1);
         }
-        
+       
         // step : 2
         public final void acquire(int arg) {
         // 2.1 tryAcquire尝试判断是否锁为抢占或者是否是重入锁
@@ -319,11 +319,11 @@ static final class Node {
 ```
 
 2. 抢占锁的过程 表示当前的锁状态不为0的情况下  
-  代码块:  
+    代码块:  
 ```java
 if (!tryAcquire(arg) &&
-            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
-            selfInterrupt();
+    acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+    selfInterrupt();
 ```
 
 3. 抢占锁这块代码
@@ -368,9 +368,8 @@ final boolean nonfairTryAcquire(int acquires) {
 
 - 通过**自旋**将已经加到阻塞队列里面的线程进行阻塞,阻塞前会判断该节点的前继节点是否为head节点,如果是的则会尝试进行一次抢占,如果没有成功,则会对该节点的**前继节点**做判断,是否为有效节点<0;直到找到一个**有效的停靠节点**之后,才开始阻塞
 
-    - 阻塞线程和解除阻塞采用的是AQS的LockSupport.park(thread) 来挂起线程，用unpark来唤醒线程。
+    - 阻塞线程和解除阻塞采用的是AQS的`LockSupport.park(thread)` 来挂起线程，用`unpark`来唤醒线程。
 - 一旦有线程被唤醒,则会回到自旋当中去继续判断该节点的前继节点是否为head。。。。直到为head为止
-
 
 
 
@@ -386,7 +385,7 @@ private void unparkSuccessor(Node node) {
             compareAndSetWaitStatus(node, ws, 0);
 
   		// 这里承接上面
-  		// 判断head节点是否真的有效?万一刚好上面bingfa取消了?
+  		// 判断head节点是否真的有效?万一刚好上面并发取消了?
   		// 判断head节点是否有效?如果有效,则直接调用下面的唤醒方法
         Node s = node.next;
         if (s == null || s.waitStatus > 0) {
@@ -413,7 +412,7 @@ private void unparkSuccessor(Node node) {
     - 找到一个靠谱的最靠前的也就是head节点后面的(不管后几位,因为**shouldParkAfterFailedAcquire**方法迟早会将这个节点挂靠到head下面)下一位有效的节点
     - 这个线程被唤醒之后,它的前继节点一定是head.所以满足条件,进入尝试获取
 
- 
+
 
 
 非公平锁的场景:  
@@ -429,3 +428,33 @@ private void unparkSuccessor(Node node) {
 #### 参考文章:
 http://blog.csdn.net/chen77716/article/details/6641477
 https://hongjiev.github.io/2017/06/16/AbstractQueuedSynchronizer/
+
+
+
+## 20190824
+
+### 描述一下ReentrantLock是如何实现的?
+
+  1. 抢占锁是否成功?说明锁已经被某线程抢占
+    2. 不成功的话，还是会尝试判断某线程和当前线程是否匹配,匹配则重入值累加1
+    3. 如果还是匹配不上，那么会将该线程封装成一个node节点，加入到AQS的队列中进行排队，设置为head节点。
+    4. 其他线程也在抢的话，会追加到AQS的队尾。
+    5. 如果第一个抢占锁的线程释放了。
+         1. 如果是公平锁，则直接将head节点取出来，进行抢占。
+         2. 如果是非公平锁，则会出现head和新进来抢占锁的线程进行PK，增加并发能力。
+
+### 抢占锁是如何保证原子性的?
+
+
+
+1. 通过CAS来保证持锁的状态。
+2. 通过自旋的方式，将node节点追加到队尾。
+3. 也是通过自旋的方式，在释放锁的时候，从AQS中找到有效的head节点。
+
+
+
+### 等待的线程是如何加入队列的?
+
+1. 将当前线程构建成一个node节点。
+2. 获取tail尾节点对象，将新node节点的前置节点设置为tail节点。
+3. 并将next节点设置为null

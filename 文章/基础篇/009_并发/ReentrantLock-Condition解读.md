@@ -22,7 +22,6 @@ typora-copy-images-to: ..\..\..\image\wz_img
    private transient Node firstWaiter;
    /** Last node of condition queue. */
    private transient Node lastWaiter;
-
    ```
 
 4. node的结构
@@ -66,11 +65,13 @@ typora-copy-images-to: ..\..\..\image\wz_img
    }
    ```
 
-   ​
+   
 
 ## 主要方法解读
 
-1. 阻塞等待的方法
+### await
+
+主体方法内容 : 
 
 ```java
   public final void await() throws InterruptedException {
@@ -97,6 +98,14 @@ typora-copy-images-to: ..\..\..\image\wz_img
           reportInterruptAfterWait(interruptMode);
   }
 ```
+
+
+
+#### addConditionWaiter
+
+首先需要获取**最后**一个等待队列节点，如果这个节点不是处于等待的状态，则取消该节点。
+
+
 
 - `addConditionWaiter`: 将当前线程加入到等待队列中  
 
@@ -128,7 +137,7 @@ private Node addConditionWaiter() {
 private void unlinkCancelledWaiters() {
   	// 找到第一个节点
     Node t = firstWaiter;
-    // 这里将构建一个有效的节点链表
+    // 这里一开始为null，会进入到下面的判断中。
     Node trail = null;
   	// 从第一个节点开始往下遍历
     while (t != null) {
@@ -140,7 +149,8 @@ private void unlinkCancelledWaiters() {
         t.nextWaiter = null;
         // 一开始肯定是null的
         if (trail == null)
-          firstWaiter = next; // 将next设置为firstWaiter,为了下一次循环再找下一个节点
+ // 将next设置为firstWaiter,为了下一次循环再找下一个节点，这里需要注意的是：t已经发生了改变。
+          firstWaiter = next; 
         else
           trail.nextWaiter = next;// 如果这个有值的情况下,存在有效节点
         if (next == null)
@@ -159,4 +169,4 @@ private void unlinkCancelledWaiters() {
 2. 将当前线程构建成一个节点放入等待队列中,并且顺手清理掉已经取消掉的无用节点
 3. 释放掉当前的独占锁
 4. 然后是一个while循环，这个循环会循环检测线程的状态，直到线程被signal或者中断唤醒**且**被放入Sync锁等待队列。如果中断发生的话，还需要调用checkInterruptWhileWaiting方法，根据中断发生的时机确定后去处理这次中断的方式，如果发生中断，退出while循环。
-5. ​
+5. 

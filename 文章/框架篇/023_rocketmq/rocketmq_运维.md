@@ -1,5 +1,9 @@
 # 运维
 
+[搜狐开源的RocketMQ运维工具](https://github.com/sohutv/mqcloud)
+
+[DDMQ 开源的封装](https://github.com/didi/DDMQ)
+
 ## 服务器端口 
 
 NameServer: 9876
@@ -12,7 +16,25 @@ VIP通道端口 : 10909
 
 
 
+
+
+
+
 # 集群搭建
+
+**2m-2s 异步复制**
+
+每个master配置一个slave，有多对Master-slave,HA采用异步复制方式,主备有短暂消息延时，毫秒级
+
+优点 : 即使磁盘损坏或者主宕机，丢失的消息非常少（因为是异步复制），且实时的消息不会受影响，应为master宕机后，消费者仍然可以从Slave消费，此过程透明。不需要人工干预。性能同多Master模式几乎一模一样。
+
+
+
+
+
+
+
+
 
 
 
@@ -30,6 +52,10 @@ VIP通道端口 : 10909
 ## 主从搭建
 
 >  配置文件最好是创建在`rocketmq-rocketmq-all-4.5.1/distribution/target/rocketmq-4.5.1/rocketmq-4.5.1/conf/default`下
+
+[利用Dledger搭建主备方式](https://github.com/apache/rocketmq/blob/master/docs/cn/dledger/deploy_guide.md)
+
+非常简单
 
 **主配置文件**
 
@@ -188,13 +214,13 @@ Broker默认的内存是8G，如果服务器资源不够的情况下可以通过
 
 # 启动经纪人
 
-
-
-```
+```shell
   > nohup sh bin/mqbroker -c  conf/default/broker-a.properties &
   > tail -f ~/logs/rocketmqlogs/broker.log 
   The broker[%s, 172.30.30.233:10911] boot success...
 ```
+
+> nohup sh bin/mqbroker -c  conf/default/broker-a.properties > /sky/rocketmq/logs/broker-a.log 2>&1 &
 
 # 关机服务器
 

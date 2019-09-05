@@ -8,8 +8,6 @@
    https://github.com/dianping/cat.git
    ```
 
-   
-
 2. 编译源码
 
    ```tex
@@ -241,4 +239,23 @@ StartedThread : 已经使用过的线程数
 `report` : 存放实时报表信息
 
 `report_content` : 小时报表二进制内容
+
+### 清理的SQL
+
+保留最近一个月的数据
+
+```sql
+-- 删除表数据
+delete from daily_report_content where  report_id <= (select * from (select MAX(report_id) from daily_report_content where creation_date < '2019-06-15 23:59:59') a)
+delete from hourly_report_content where report_id <= (select * from(select MAX(report_id) from hourly_report_content where creation_date < '2019-06-15 23:59:59') a)
+
+delete from graph where id <= (select * from(select MAX(id) from graph where period < '2019-07-15 23:59:59') a);
+
+
+
+-- 清理磁盘空间
+optimize table daily_report_content;
+optimize table hourly_report_content;
+optimize table graph;
+```
 
