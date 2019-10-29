@@ -315,4 +315,19 @@ q       退出more
 
 
 
-### 
+### awk
+
+根据查询出来的匹配结果进行分割
+
+```shell
+netstat -ntpl | awk -F ' ' '{print $7}'
+```
+
+使用场景案例
+
+根据端口找到对应的pid
+
+```shell
+netstat -ntpl| grep :5001 | awk -F' ' '{print $7}'| awk -F'/' '{print $1}'
+```
+
