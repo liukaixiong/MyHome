@@ -331,3 +331,17 @@ netstat -ntpl | awk -F ' ' '{print $7}'
 netstat -ntpl| grep :5001 | awk -F' ' '{print $7}'| awk -F'/' '{print $1}'
 ```
 
+### sort 排序
+
+```shell
+lsof -n / |sort -k 7rn | head -n 20
+```
+
+ 结果说明：
+1.-t 指定文本分隔符
+2.-k 指定排序列
+3.-n 按数字进行排序
+4.-r 翻转排序结果 
+
+head : 取前20个
+
