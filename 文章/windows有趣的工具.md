@@ -4,6 +4,12 @@
 
 [天若OCR识别工具](https://tianruoocr.cn/server/index.php)
 
+## 画图
+
+[draw 蛮好用的](https://github.com/jgraph/drawio-desktop/releases)
+
+
+
 
 
 
@@ -30,6 +36,8 @@ uTools : 快速查询 以及各类工具
 
 Everything : 机器搜索
 
+[类似于linux命令行](https://cmder.net/)
+
 ## 爬虫
 
 后裔采集器 : 挺好的爬虫采集器
@@ -44,3 +52,4 @@ Everything : 机器搜索
 
 [临时邮箱生成器](https://www.52pojie.cn/thread-975333-1-1.html)
 
+[在线的临时邮箱生成器](http://linshiyouxiang.net/)
