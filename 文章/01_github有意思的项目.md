@@ -1,5 +1,11 @@
 # 记录一些Github上面有趣的项目地址
 
+## 谷歌插件
+
+[谷歌插件排行](https://zhaoolee.com/ChromeAppHeroes/)
+
+
+
 ## 设计模式
 
 ### [Java设计模式](https://github.com/iluwatar/java-design-patterns)
@@ -40,6 +46,8 @@ coding阶段，我们习惯于以debug模式运行程序，享受即时更新代
 
 代码生成工具
 
+[很大，但是很多功能用不上，亮点就是拖动组件生成前端代码](https://github.com/zhangdaiscott/jeecg-boot)
+
 ## 分布式配置中心
 
 [apollo](https://github.com/ctripcorp/apollo/wiki/Quick-Start)
@@ -77,7 +85,7 @@ QuestionAnsweringSystem是一个Java实现的人机问答系统，能够自动�
   Jmockdta是一款实现模拟JAVA类型或对象的实例化并随机初始化对象的数据的工具框架。单元测试的利器。
 
 
-  
+
 
 ###  [APIJSON](https://github.com/TommyLemon/APIJSON)
 
