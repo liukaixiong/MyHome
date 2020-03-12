@@ -56,7 +56,7 @@ private transient volatile Node<K,V>[] nextTable;
                   这是一个协助扩容的方法。这个方法被调用的时候，当前ConcurrentHashMap一定已
                   经有了nextTable对象，首先拿到这个nextTable对象，调用transfer方法。回看上面的
                   transfer方法      可以看到，当本线程进入扩容方法的时候会直接进入复制阶段。
-                /*
+                */
                 tab = helpTransfer(tab, f);
             else {
                 // 能够进入到这里的情况有以下几种:
@@ -189,7 +189,7 @@ private final Node<K,V>[] initTable() {
      * @return true if the field was changed.
      *              如果field的值被更改
      */
- // public native boolean compareAndSwapObject(Object obj, long offset,Object expect,     Object update);
+  public native boolean compareAndSwapObject(Object obj, long offset,Object expect,     Object update);
 
       static final <K,V> boolean casTabAt(Node<K,V>[] tab, int i,
                                         Node<K,V> c, Node<K,V> v) {
@@ -454,7 +454,7 @@ private final Node<K,V>[] initTable() {
 
 2. get方法里为什么需要用tabAt方法去读取table[i]，而不是直接用table[i]？
 
-   ```tex
+   ```wiki
     虽然table是用volatile方式修饰的,在多线程的环境之下都能保持可见,但table是一个数组。
     不能确保数组里面的节点内容也是最新的,也可能出现CPU缓存或者副本的情况,
     所以每次更新也是通过CAS去内存里面直接更新,获取也是直接从内存中直接获取..
