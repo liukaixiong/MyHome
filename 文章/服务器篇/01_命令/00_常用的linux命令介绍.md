@@ -21,6 +21,14 @@ source /etc/profile
 
 ## 命令
 
+查看CentOS版本
+
+```shell
+ lsb_release -a
+```
+
+
+
 [参考地址](http://www.runoob.com/w3cnote/linux-common-command-2.html)
 
 ### 1、ls命令
