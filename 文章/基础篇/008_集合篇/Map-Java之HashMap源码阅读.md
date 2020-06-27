@@ -258,3 +258,18 @@ static int indexFor(int h, int length) {  //jdk1.7的源码，jdk1.8没有这个
 ```
 
 参考资料:http://www.importnew.com/20386.html - **写的真他妈不是一般的好**
+
+### 补充
+
+[以下来源](https://www.bilibili.com/video/BV1Qk4y1672n?from=search&seid=9376509036993552262)
+
+1. hash的理解
+
+把任意长度的输入通过hash算法转化成固定长度的输出。
+
+存在的问题就是出现hash的冲突。
+
+1. 好点的hash算法，应该考虑的点：
+   1. 效率得高。要做到长文本也能高效计算。
+   2. 不能逆推出原文
+   3. ​

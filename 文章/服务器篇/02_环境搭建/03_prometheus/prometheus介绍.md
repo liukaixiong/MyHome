@@ -93,7 +93,7 @@ scrape_configs:
 ./mysqld_exporter --config.my-cnf=".my.cnf"  
 ```
 
-## 安装node_exporter 
+## 安装node_exporter
 
 [下载地址 - 找到node_exporter](https://prometheus.io/download/#node_exporter)
 
