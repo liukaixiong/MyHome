@@ -1,0 +1,155 @@
+# vue的环境搭建
+
+## 1. 安装nodejs环境
+
+[官网下载](http://nodejs.cn/download/)
+
+并且在环境变量中加入nodejs的环境变量
+
+##  2. vscode 环境
+
+首先查看vscode 的npm环境信息
+
+```shell
+npm config ls
+```
+
+```tex
+PS D:\github\project\form-generator> npm config ls
+; cli configs
+metrics-registry = "https://registry.npmjs.org/"
+scope = ""
+user-agent = "npm/6.12.0 node/v12.13.0 win32 x64"
+
+; userconfig C:\Users\liukx\.npmrc
+prefix = "D:\\dev\\nodejs\\npm"
+
+; builtin config undefined
+
+; node bin location = D:\dev\nodejs\node.exe
+; cwd = D:\github\project\form-generator
+; HOME = C:\Users\liukx
+; "npm config ls -l" to show all defaults.
+```
+
+记住prefix配置的地址，才是npm下载包的最终地址，该目录下面会出现**node_modules**文件夹，里面就包含了你安装的所有包。
+
+如果你需要改变这个地址可以输入命令
+
+```shell
+npm config set prefix "文件夹路径"
+```
+
+这里需要注意的是你输入的文件夹路径不能是已经存在的路径否则会报:Error: EEXIST: file already exists错误。
+
+如果vscode出现和CMD执行结果不一致:
+
+**点击vscode右键属性-兼容性-以管理员身份运行**
+
+如果出现无法加载文件 D:\dev\nodejs\npm\vue.ps1，因为在此系统上禁止运行脚本。
+
+则请输入: 
+
+```shell
+1. 以管理员身份运行vscode;
+2. 执行：get-ExecutionPolicy，显示Restricted，表示状态是禁止的;
+3. 执行：set-ExecutionPolicy RemoteSigned;
+4. 这时再执行get-ExecutionPolicy，就显示RemoteSigned;
+```
+
+
+
+## 3. vue环境搭建
+
+```shell
+ npm install vue 
+ npm install -g @vue/cli-init
+```
+
+如果vue3.0
+
+```shell
+vue ui // 通过gui创建
+vue create 项目名 
+```
+
+
+
+如果vscode找不到，则需要查看环境变量是否添加了**第二步**npm的node_modules位置
+
+
+
+## 4. 创建项目
+
+```shell
+npm init webpack 项目名
+```
+
+
+
+## 5. 调试项目
+
+### 1. 更改npm的下载源
+
+```shell
+npm config set registry https://registry.npm.taobao.org
+```
+
+检测是否成功:
+
+```shell
+// 配置后可通过下面方式来验证是否成功
+npm config get registry
+// 或
+npm info express
+```
+
+如果需要还原:
+
+```shell
+npm config set registry https://registry.npmjs.org/
+```
+
+
+
+### 2. 下载插件
+
+1.  Debugger for Chrome
+
+然后如果你是vue2的:
+
+打开 config/index.js 并找到 devtool 属性。将其更新为：
+如果你使用的是 Vue CLI 2，请设置并更新 config/index.js 内的 devtool 属性：
+
+```json
+devtool: 'source-map'
+```
+
+ 如果你使用的是 Vue CLI 3，请设置并更新 vue.config.js 内的 devtool 属性：
+
+```json
+module.exports = {
+    configureWebpack: {
+    	devtool: 'source-map'
+    }
+} 
+```
+
+
+
+**开启完成之后，通过浏览器访问然后F12--》source--》webpack 去找对应的源码加入断点**
+
+2. vue helper
+
+针对vue路径引入快件
+
+### 2. 下载VUE调试插件
+
+谷歌商店下载 : vue dev tools
+
+
+
+
+
+
+

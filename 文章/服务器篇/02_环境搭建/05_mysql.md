@@ -120,7 +120,7 @@ shell> yum install mysql-community-server
 
 启动MySQL服务
 --------------------- 
- 
+
 
 
 

@@ -48,6 +48,16 @@ coding阶段，我们习惯于以debug模式运行程序，享受即时更新代
 
 [很大，但是很多功能用不上，亮点就是拖动组件生成前端代码](https://github.com/zhangdaiscott/jeecg-boot)
 
+[直接写SQL就能访问的接口](https://github.com/zycgit/hasor)
+
+前端表单代码生成器
+
+[form-create](https://github.com/xaboy/form-create/blob/2.0/README_zh-CN.md)
+
+[form-generator](https://github.com/JakHuang/form-generator) : 非常棒的可视化界面。
+
+
+
 ## 分布式配置中心
 
 [apollo](https://github.com/ctripcorp/apollo/wiki/Quick-Start)
@@ -262,4 +272,6 @@ https://github.com/vipshop/vjtools
 
 
 
-community
+## 性能监控
+
+[flare-profiler](https://github.com/kylixs/flare-profiler/blob/master/doc/quick-start.md)

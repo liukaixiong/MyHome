@@ -63,7 +63,7 @@
      mkdir /usr/java
      
      //把下载的rpm文件copy过去
-     cp jdk-8u131-linux-x64.rpm /usr/java/12345
+     cp jdk-8u131-linux-x64.rpm /usr/java
      ```
 
   5. 添加执行权限:
@@ -73,14 +73,15 @@
      mkdir cd /usr/java
      
      //添加可执行权限
-     chmod +x jdk-8u101-linux-x64.rpm12345
+     chmod +x jdk-8u101-linux-x64.rpm
      ```
 
   6. 执行rpm命令安装:
 
      ```
      //安装rpm软件包
-     rpm -ivh jdk-8u101-linux-x64.rpm12
+     rpm -ivh jdk-8u101-linux-x64.rpm
+     
      ```
 
   7. 查看是否安装成功：
