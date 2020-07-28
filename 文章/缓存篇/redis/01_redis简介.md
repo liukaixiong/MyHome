@@ -1,0 +1,31 @@
+## 微信文章汇总:
+
+[Redis的5个使用场景](https://mp.weixin.qq.com/s?subscene=23&__biz=MzAxNDMwMTMwMw==&mid=2247487971&idx=3&sn=7adbd4407fb6aeba5c8b7640c5fedd29&chksm=9b9430fbace3b9ed7fb878373566689888645a69f9b0a2535cc6b598ef0be6837703f3ecc041&scene=7&key=53e823c17d388498cddcb7b970ea711d08d5e861a04a23fd7c144683ce1f13c92e395ad469e96879d7bbb3c2f3c2ac7635b4fe26009720f0ed1f2cf92cef445b8dd8eb227874205521c887625bd6980b&ascene=0&uin=MTc1ODIyMzMxOA%3D%3D&devicetype=Windows+10+x64&version=62090529&lang=zh_CN&exportkey=A1ST%2BjuJ1HlzfdqVboJkpe4%3D&pass_ticket=6pzWiDNELZBThC518Hus%2BAgXs2ZqjEbWiUCRHF0aUf3w23HGK%2FRta%2FyyvOX9hk%2Fs)
+
+[《解锁Redis系列2》常用命令和使用场景](https://mp.weixin.qq.com/s?subscene=23&__biz=MzI0OTk0MzYzNg==&mid=2247483756&idx=1&sn=5cef6c1882a9f1e4bb3b0750e79ca4db&chksm=e9888257deff0b41ea8358779163a7798b2ea8cfda7ffc896014871566f0cb3a5d36eaabb451&scene=7&key=acec999da27edd250cefb63fea6f019782a0a8f100fb398ee689b13e66f235e47cbc5a2b8b0deb78c48a67269cff4b94b4f2afe6084ce85401d5b1ca5afcba08f6d1848e50bbc6ff825f41c798daaf0a&ascene=0&uin=MTc1ODIyMzMxOA%3D%3D&devicetype=Windows+10+x64&version=62090529&lang=zh_CN&exportkey=A9%2BjtfyW5Ew0T%2FQXQamz47I%3D&pass_ticket=6pzWiDNELZBThC518Hus%2BAgXs2ZqjEbWiUCRHF0aUf3w23HGK%2FRta%2FyyvOX9hk%2Fs)
+
+[Redis服务端优化实践：配置优化、主从切换、持久化](https://mp.weixin.qq.com/s?subscene=23&__biz=MzI4NTA1MDEwNg==&mid=2650764050&idx=1&sn=891287b9f99a8c1dd4ce9e1805646741&chksm=f3f9c687c48e4f91c6631e7f5e36a9169c10549386bec541dbeef92ed0023a373f6ec25c2ef1&scene=7&key=5ea26212a5cd15896f1bf93e9ae9e881e4d1abb99e4ff1ead7e9a0a061f0a65ba2098c86ddcd2441052d59c7a3b99d7b481411e88c129c84159762baaef50aaf757810fd45c69b87ed652011f0925ea9&ascene=0&uin=MTc1ODIyMzMxOA%3D%3D&devicetype=Windows+10+x64&version=62090529&lang=zh_CN&exportkey=A2DKofk6TioFedXJCqW1cco%3D&pass_ticket=6pzWiDNELZBThC518Hus%2BAgXs2ZqjEbWiUCRHF0aUf3w23HGK%2FRta%2FyyvOX9hk%2Fs)
+
+[Redis Cluster 服务平台化之路 | 实践分享](https://mp.weixin.qq.com/s?subscene=23&__biz=MjM5NTk0MTM1Mw==&mid=2650637349&idx=1&sn=ef10ee67c4b8c92bd50963be1dbadbce&chksm=bef9faa3898e73b55b2c1674a0c25fb8bc094f5672830fecb8324b98cc96f8f331f045d83ee0&scene=7&key=acec999da27edd2593f08460a2d4306a6d452fc52dd9964963b24458dce811bfac0b67ded1bb727680da2e89cf25ab215f5d6aa187e35873a5c4d930267bbb5ae1cd5c09b40dba57ba8cd915ebd74ff3&ascene=0&uin=MTc1ODIyMzMxOA%3D%3D&devicetype=Windows+10+x64&version=62090529&lang=zh_CN&exportkey=A%2FVHurwWgXDj0CWF3m0LTSI%3D&pass_ticket=6pzWiDNELZBThC518Hus%2BAgXs2ZqjEbWiUCRHF0aUf3w23HGK%2FRta%2FyyvOX9hk%2Fs)
+
+[Redis 在互联网金融账务核心系统中的应用实践](https://mp.weixin.qq.com/s?subscene=23&__biz=MjM5NTk0MTM1Mw==&mid=2650641113&idx=2&sn=3e370f91b7f13cf345878e5894e5292e&chksm=bef9ec5f898e65491107e4513022998b7ffde3f4b1c7dc1e141322353db6eada3376844e7f00&scene=7&key=60bc1c903d6030650851bee95e93029ce1e71ee21e9bcb80625f76e0485f8ca9c26220b44b931152488ea171cdfdb60367f702c0c2a44fae57ec32fa6037e41267ca78f1fd32db9594494b3ad01092b9&ascene=0&uin=MTc1ODIyMzMxOA%3D%3D&devicetype=Windows+10+x64&version=62090529&lang=zh_CN&exportkey=A%2BWO5vSoJiKsVvkeH0oOto0%3D&pass_ticket=6pzWiDNELZBThC518Hus%2BAgXs2ZqjEbWiUCRHF0aUf3w23HGK%2FRta%2FyyvOX9hk%2Fs)
+
+[Redis 实践汇总和使用建议。](https://mp.weixin.qq.com/s?subscene=23&__biz=MjM5NTk0MTM1Mw==&mid=2650641113&idx=2&sn=3e370f91b7f13cf345878e5894e5292e&chksm=bef9ec5f898e65491107e4513022998b7ffde3f4b1c7dc1e141322353db6eada3376844e7f00&scene=7&key=60bc1c903d6030650851bee95e93029ce1e71ee21e9bcb80625f76e0485f8ca9c26220b44b931152488ea171cdfdb60367f702c0c2a44fae57ec32fa6037e41267ca78f1fd32db9594494b3ad01092b9&ascene=0&uin=MTc1ODIyMzMxOA%3D%3D&devicetype=Windows+10+x64&version=62090529&lang=zh_CN&exportkey=A%2BWO5vSoJiKsVvkeH0oOto0%3D&pass_ticket=6pzWiDNELZBThC518Hus%2BAgXs2ZqjEbWiUCRHF0aUf3w23HGK%2FRta%2FyyvOX9hk%2Fs)
+
+[第10期实录：Redis 应用与优化最佳实践](https://mp.weixin.qq.com/s?subscene=23&__biz=Mzg2NzEwMjEwMQ==&mid=2247483938&idx=1&sn=705ff045f64bfd2dab72a47f067bfd39&chksm=ce41fed8f93677ce14be4b699a8d64018fc256e0911bd9b2bd13322260add6ac41818ecdc32b&scene=7&key=2af4ca460c7df26d55bd5a499b077be836a5c844c8acd72ec376abfcecd520e5f019702f8599af3bf52817c5ddbac78689d8bc4088addf7c83dbc1c0a03f0e640d43d70d3bad8440cb988dfbeb1322ef&ascene=0&uin=MTc1ODIyMzMxOA%3D%3D&devicetype=Windows+10+x64&version=62090529&lang=zh_CN&exportkey=AzRnilhpChyunTljgV7aMZs%3D&pass_ticket=6pzWiDNELZBThC518Hus%2BAgXs2ZqjEbWiUCRHF0aUf3w23HGK%2FRta%2FyyvOX9hk%2Fs)
+
+[Redis 选型、调优、监控、数据一致性等四大难点知识总结 | 进阶技巧](https://mp.weixin.qq.com/s?subscene=23&__biz=MjM5NTk0MTM1Mw==&mid=2650638558&idx=1&sn=7de2a0cb5592d641af7ee14cd17ea8d7&chksm=bef9f658898e7f4e152531fa3eb59b5790d780894184b0bfb6888a2150de17d9182a2a5649b4&scene=7&key=acec999da27edd25bc562dce7bba5f8c1c5f5091a487a3b9fe053dd296815750172b0e55a6237da59c5259864b9d6d3b2e12bf706d71d905107fb5e5df0d7ce939183c7706580159250f1c4c571c8954&ascene=0&uin=MTc1ODIyMzMxOA%3D%3D&devicetype=Windows+10+x64&version=62090529&lang=zh_CN&exportkey=A%2FFh6hOzwj4Pu%2Fgk7Ir4%2BSU%3D&pass_ticket=6pzWiDNELZBThC518Hus%2BAgXs2ZqjEbWiUCRHF0aUf3w23HGK%2FRta%2FyyvOX9hk%2Fs)
+
+[Redis 三大问题及如何保证双写一致](https://mp.weixin.qq.com/s?subscene=23&__biz=MzIzNDkwMTI3MQ==&mid=2247484466&idx=1&sn=2e7e15244de09a805f06f860294d30f5&chksm=e8ee1e4adf99975ce9653701057887bed3940c31297ee53c4a67296aa382f5bf87898f8d9a19&scene=7&key=aabb5ee173354e5d751b9399436526f6d9a4bea36689bea7c61fd62d4edca32f0e2c6be423117f8c8b1daa3d1dbcc1d2b69dca62781cbf0f473b56e105140e97077ea6dc8040c6c06e8868232710866b&ascene=0&uin=MTc1ODIyMzMxOA%3D%3D&devicetype=Windows+10+x64&version=62090529&lang=zh_CN&exportkey=A4Ur8QokRpC%2FYU%2Fl0KSacO4%3D&pass_ticket=6pzWiDNELZBThC518Hus%2BAgXs2ZqjEbWiUCRHF0aUf3w23HGK%2FRta%2FyyvOX9hk%2Fs)
+
+## 结合应用场景
+
+[API 面试四连杀：接口如何设计？安全如何保证？签名如何实现？防重如何实现？](https://mp.weixin.qq.com/s?subscene=23&__biz=MzIzNDkwMTI3MQ==&mid=2247484466&idx=1&sn=2e7e15244de09a805f06f860294d30f5&chksm=e8ee1e4adf99975ce9653701057887bed3940c31297ee53c4a67296aa382f5bf87898f8d9a19&scene=7&key=aabb5ee173354e5d751b9399436526f6d9a4bea36689bea7c61fd62d4edca32f0e2c6be423117f8c8b1daa3d1dbcc1d2b69dca62781cbf0f473b56e105140e97077ea6dc8040c6c06e8868232710866b&ascene=0&uin=MTc1ODIyMzMxOA%3D%3D&devicetype=Windows+10+x64&version=62090529&lang=zh_CN&exportkey=A4Ur8QokRpC%2FYU%2Fl0KSacO4%3D&pass_ticket=6pzWiDNELZBThC518Hus%2BAgXs2ZqjEbWiUCRHF0aUf3w23HGK%2FRta%2FyyvOX9hk%2Fs)
+
+
+
+
+
+## github
+
+[高并发架构](https://github.com/doocs/advanced-java/tree/master/docs/high-concurrency)

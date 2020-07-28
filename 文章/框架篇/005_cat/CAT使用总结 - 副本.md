@@ -6,7 +6,7 @@
    https://github.com/dianping/cat.git
    ```
 
-   ​
+   
 
 2. 编译源码
 
@@ -128,7 +128,7 @@
     - com.dianping.cat.message.io.TransportManager : 具体的事务消息管理器,通过MessageManager 调度
     - com.dianping.cat.message.spi.MessageStatistics : 消息的统计汇总
     - com.dianping.cat.status.StatusUpdateTask : 状态更新任务,应该是发送给服务端心跳的
-    - ​
+    - 
 
 
 `AlertManager` : 消息发送管理类

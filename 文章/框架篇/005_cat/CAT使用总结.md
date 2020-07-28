@@ -230,6 +230,26 @@ StartedThread : 已经使用过的线程数
 
 `CatHomeModule`: Cat的环境配置文件具体执行类
 
+
+
+## 页面
+
+### Problem
+
+客户端数据接收处理器: `LongExecutionProblemHandler.handle`
+
+| 描述             | 客户端埋点的key标记(注意带小写) | 时间维度划分                   |
+| ---------------- | ------------------------------- | ------------------------------ |
+| **Long-url**     | `URL`                           | 1000, 2000, 3000, 5000         |
+| **Long-sql**     | `SQL`                           | 100, 500, 1000, 3000, 5000     |
+| **Long-service** | `PigeonService` 或者 `Service`  | 50, 100, 500, 1000, 3000, 5000 |
+| **Long-cache**   | 以`Cache.`开始                  | 10, 50, 100, 500               |
+| **Long-call**    | `PigeonCall` 或者 `Call`        | 100, 500, 1000, 3000, 5000     |
+
+如果需要调整可能需要改这个里面的源码和页面时间段源码
+
+
+
 ## CAT数据库中需要定时清理的大表
 
 `daily_report_content` : 天报表二进制内容
@@ -250,8 +270,6 @@ delete from daily_report_content where  report_id <= (select * from (select MAX(
 delete from hourly_report_content where report_id <= (select * from(select MAX(report_id) from hourly_report_content where creation_date < '2019-06-15 23:59:59') a)
 
 delete from graph where id <= (select * from(select MAX(id) from graph where period < '2019-07-15 23:59:59') a);
-
-
 
 -- 清理磁盘空间
 optimize table daily_report_content;

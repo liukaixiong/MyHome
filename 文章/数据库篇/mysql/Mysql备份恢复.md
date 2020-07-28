@@ -23,6 +23,7 @@ rpm -qa |grep xtrabackup
 常用选项: 
    --host     指定主机
    --user     指定用户名
+
    --password    指定密码
    --port     指定端口
 
@@ -62,6 +63,24 @@ innobackupex --user=root --password=123456 --host=127.0.0.1 /backups/
 innobackupex --apply-log /backups/2018-07-30_11-01-37/　　
 ```
 
+
+
+**或者说直接将文件转移到mysql的data文件目录下**
+
+```tex
+1. 停止MySQL：systemctl stop mariadb  
+2. 将/var/lib/mysql下面的所有文件全部删除：rm /var/lib/mysql/* -rf（如果前面没有备份mysql数据库， 那么在删除数据文件后要重建mysql系统表，重建命令是sudo mysql_install_db --user=mysql，但重建会导致原有用户信息全部丢失） 
+3. 将第二步准备过的文件拷贝到/var/lib/mysql下：cp /usr/local/backup/2015-11-09_16-33-58/* /var/lib/mysql -rf
+4. 给文件赋权：chown -R mysql:mysql /var/lib/mysql/  
+5. 启动Mariadb：systemctl start mariadb 
+```
+
+[参考文章](https://www.jianshu.com/p/889ec53580e7)
+
+
+
+
+
 启动Mysql
 
 ```shell
@@ -79,19 +98,17 @@ innobackupex --apply-log /backups/2018-07-30_11-01-37/　　
 # 做一次增量备份（基于当前最新的全量备份）
 innobackupex  --defaults-file=/etc/my.cnf --user=root --password=root --incremental /backups/ --incremental-basedir=/backups/2018-07-30_11-01-37
 # 1. 准备基于全量
-innobackupex --user=root --password=root --defaults-file=/etc/my.cnf --apply-log --redo-only /backups/2018-07-30_11-01-37
+innobackupex  --defaults-file=/etc/my.cnf --user=root --password=root --apply-log --redo-only /backups/2018-07-30_11-01-37
 # 2. 准备基于增量
 innobackupex --user=root --password=root --defaults-file=/etc/my.cnf --apply-log --redo-only /backups/2018-07-30_11-01-37 --incremental-dir=/backups/2018-07-30_13-51-47/
 # 3. 恢复
-innobackupex --copy-back --defaults-file=/etc/my.cnf /opt/2017-01-05_11-04-55/
+innobackupex --defaults-file=/etc/my.cnf --copy-back  /opt/2017-01-05_11-04-55/
 #解释：
 #1. 2018-07-30_11-01-37指的是完全备份所在的目录。
 #2. 2018-07-30_13-51-47指定是第一次基于2018-07-30_11-01-37增量备份的目录，其他类似以此类推，即如果有多次增量备份。每一次都要执行如上操作。
 ```
 
 需要注意的是，增量备份仅能应用于InnoDB或XtraDB表，对于MyISAM表而言，执行增量备份时其实进行的是完全备份。
-
-
 
 
 
