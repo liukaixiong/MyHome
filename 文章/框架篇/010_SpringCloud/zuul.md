@@ -214,11 +214,60 @@ org.springframework.cloud.netflix.metrics.ServoEnvironmentPostProcessor
 
 
 
-## 
+介绍三个Route路由转发类型的filter:
+
+- SimpleHostRoutingFilter，直接转换host地址。
+- SendForwardFilter，本地url跳转，网关里面定义的controller访问触发。
+- RibbonRoutingFilter，基于服务注册与发现，动态的路由转发。
+
+```yaml
+# 如果不走eureka，直接走本地的配置。
+zuul:
+	routes:
+		service_name:
+			url: http://localhost:8888
+```
 
 
 
 
+
+
+
+### 过滤器拦截请求
+
+ 在过滤器中对请求进行拦截是一个很常见的需求，本节的“使用过滤器”部分中讲解的 IP 黑名单限制就是这样的一个需求。如果请求在黑名单中，就不能让该请求继续往下执行，需要对其进行拦截并返回结果给客户端。 
+
+拦截和返回结果只需要 5 行代码即可实现，代码如下所示。
+
+```java
+RequestContext ctx = RequestContext.getCurrentContext();
+// 告诉 Zuul 不需要将当前请求转发到后端的服务 			RibbonRoutingFilter 的过滤条件
+ctx.setSendZuulResponse(false);
+// 告诉zuul不需要将当前的请求转发到网关的controller，		SendForwardFilter过滤条件
+ctx.set("sendForwardFilter.ran", true);
+ctx.setResponseBody("返回信息");
+return null;
+```
+
+上面的条件只是在特定的Filter中会被过滤掉，假设我们自定义的拦截器有很多个，根据优先级排序，发现第一个就已经需要拦截掉了，这个时候按照上面的设置可能是行不通的，但可以参考上面的形式自己做一个：
+
+```java
+// 告诉下面的拦截器，不要再执行了
+ctx.set("isSuccess", false);
+```
+
+利用这种方法，在后面的过滤器就需要用到这个值来决定自己此时是否需要执行，此时只需要在 shouldFilter 方法中加上如下所示的代码即可。
+
+```java
+public boolean shouldFilter() {
+    RequestContext ctx = RequestContext.getCurrentContext();
+    Object success = ctx.get("isSuccess");
+    return success == null ? true : Boolean.parseBoolean(success.toString());
+}
+```
+
+实际上都是通过打标记的形式，来传递值判断。
 
 
 

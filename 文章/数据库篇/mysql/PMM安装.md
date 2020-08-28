@@ -102,7 +102,97 @@ pmm-admin config --server-insecure-tls --server-url=https://admin:admin@<IP Addr
 
 
 
+## 更新
+
+## 使用Docker更新PMM服务器
+
+1. 检查PMM服务器的安装版本。有两种方法。
+
+   1. 用途：`docker ps`
+
+      ```
+      docker ps
+      ```
+
+      这将显示版本标签附加到图像名称（例如`percona/pmm-server:2`）。
+
+   2. 用途：`docker exec`
+
+      ```
+      docker exec -it pmm-server curl -u admin:admin http://localhost/v1/version
+      ```
+
+      这将打印一个包含版本字段的JSON字符串。
+
+2. 检查是否有PMM服务器的较新版本。
+
+   访问https://hub.docker.com/r/percona/pmm-server/tags/。
+
+3. 停止容器并创建备份。
+
+   备份当前容器及其数据，以便您可以恢复使用它们，并作为安全措施，以防更新过程失败。
+
+   ```
+   docker stop pmm-server
+   docker rename pmm-server pmm-server-backup
+   docker cp pmm-data pmm-data-backup
+   ```
+
+4. 拉出新的PMM服务器映像。
+
+   您可以指定确切的版本号或最新版本。
+
+   要提取特定版本（本示例中为2.9.1）：
+
+   ```
+   docker pull percona/pmm-server:2.9.1
+   ```
+
+   要获取最新版本的PMM 2：
+
+   ```
+   docker pull percona/pmm-server:2
+   ```
+
+5. 运行图像。
+
+   ```
+   docker run -d -p 80:80 -p 443:443 --volumes-from pmm-data --name pmm-server --restart always percona/pmm-server:2.9.1
+   ```
+
+   （`pmm-data`是您现有的数据图像。）
+
+6. 检查新版本。
+
+   重复步骤1。您还可以检查PMM Server Web界面。
+
+
+
+## Mysql授权
+
+```
+grant all privileges on *.* to 'pmm'@'172.19.189.160' identified by 'elab@123';
+flush privileges;
+```
+
+官网推荐
+
+```sql
+GRANT SELECT, PROCESS, SUPER, REPLICATION CLIENT, RELOAD ON *.* TO 'pmm'@' localhost' IDENTIFIED BY 'pass' WITH MAX_USER_CONNECTIONS 10;
+GRANT SELECT, UPDATE, DELETE, DROP ON performance_schema.* TO 'pmm'@'localhost';
+```
+
+阿里云
+
+```sql
+CREATE USER 'aliyun'@'%' IDENTIFIED BY PASSWORD '*6898950482C0553930FEA33664F18143369FB1FD';
+GRANT SHOW DATABASES, PROCESS, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'aliyun'@'%';
+GRANT SELECT ON *.*  TO 'aliyun'@'%';
+```
+
 
 
 [参考1](https://mritd.me/2020/01/21/set-up-percona-server/)
+
+[docker安装 官网](https://www.percona.com/doc/percona-monitoring-and-management/2.x/install/docker.html)
 

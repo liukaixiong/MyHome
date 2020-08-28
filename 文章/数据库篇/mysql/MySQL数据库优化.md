@@ -108,3 +108,7 @@ LOCAL|NO_WRITE_TO_BINLOG都是表示不写入日志.,优化表只对VARCHAR,BLOB
 ### 结语
 
 一个完整而复杂的高并发系统架构中，一定会包含：各种复杂的自研基础架构系统。各种精妙的架构设计.因此一篇小文顶多具有抛砖引玉的效果,但是数据库优化的思想差不多就这些了.
+
+
+
+[微信 : 超级实用的 MySQL 常用优化指南！](https://mp.weixin.qq.com/s?__biz=MzA5NDg3MjAwMQ==&mid=2457106953&idx=1&sn=a265008616b54b1ae8a571a248fda888&chksm=87c8d2a7b0bf5bb14bfde39a55c35ac92cb805038547a0f4df223f808e0ed187eb44a600c08d&scene=126&sessionid=1597190995&key=38f9a66cdb126ea0405a5af114ff339e93a55de85686fe288c556abb5b93383f32a31044523826f1f3590e9a3aad35519ebaa317bce2681c0d41c05be30cae470d7ca5b6bba452bdd2efd062e2204169&ascene=1&uin=MTc1ODIyMzMxOA%3D%3D&devicetype=Windows+10+x64&version=62090538&lang=zh_CN&exportkey=A4suT5CnArNh%2BWWl0GCDU8U%3D&pass_ticket=EJ9UG4Jgp1Nx2aLxNRBK9ZRpJ9aHDDVnFIAXjO%2FRWIROHHunSA%2FQR99tCMmkeBrs)
