@@ -266,10 +266,10 @@ StartedThread : 已经使用过的线程数
 
 ```sql
 -- 删除表数据
-delete from daily_report_content where  report_id <= (select * from (select MAX(report_id) from daily_report_content where creation_date < '2019-06-15 23:59:59') a)
-delete from hourly_report_content where report_id <= (select * from(select MAX(report_id) from hourly_report_content where creation_date < '2019-06-15 23:59:59') a)
+delete from daily_report_content where  report_id <= (select * from (select MAX(report_id) from daily_report_content where creation_date < '2020-07-15 23:59:59') a);
+delete from hourly_report_content where report_id <= (select * from(select MAX(report_id) from hourly_report_content where creation_date < '2020-07-15 23:59:59') a);
 
-delete from graph where id <= (select * from(select MAX(id) from graph where period < '2019-07-15 23:59:59') a);
+delete from graph where id <= (select * from(select MAX(id) from graph where period < '2020-07-15 23:59:59') a);
 
 -- 清理磁盘空间
 optimize table daily_report_content;
