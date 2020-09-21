@@ -176,7 +176,7 @@ PRIMARY KEY `PRIMARY` (`id`)
 
 可以看到DROP TABLE 前的POS点是1323，那我们可以通过binlog2sql进行标准SQL的生成，binlog2sql的使用的和安装请看之前我写的博客：http://www.cnblogs.com/xuanzhi201111/p/6602489.html，再次为开源数据闪回工具的大神们点赞。
 
-### 利用binlog回滚到指定的位置
+## 利用binlog回滚到指定的位置
 
 
 
