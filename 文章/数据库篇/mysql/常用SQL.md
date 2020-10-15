@@ -25,3 +25,20 @@ show columns from sms_log;
 show create table sms_log;
 ```
 
+## 批量获取表结构信息
+
+```sql
+SELECT
+	DISTINCT
+	b.TABLE_NAME,
+	b.TABLE_COMMENT,
+	a.column_name,
+	a.COLUMN_COMMENT
+FROM
+	information_schema.`COLUMNS` a
+LEFT JOIN information_schema.`TABLES` b ON a.TABLE_NAME = b.table_name
+where
+	a.TABLE_SCHEMA = 'marketing_db'
+	and a.TABLE_NAME in ('brand','c_user')
+```
+
