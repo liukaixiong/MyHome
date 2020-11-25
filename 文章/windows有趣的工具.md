@@ -10,9 +10,29 @@
 
 
 
+  ## 浏览器插件
 
+  OneTab: 减少多个页面打开占用内存情况
 
+  AdGuard: 去广告插件
 
+Infinity: 新建标签页
+
+## 谷歌插件
+
+  [谷歌插件排行](https://zhaoolee.com/ChromeAppHeroes/)
+
+  [谷歌商店破解插件](https://github.com/konglinghao75/GuGesousu
+
+  [直接写SQL就能访问的接口](https://github.com/zycgit/hasor)
+
+  ## 前端表单代码生成器
+
+  [form-create](https://github.com/xaboy/form-create/blob/2.0/README_zh-CN.md)
+
+  [form-generator](https://github.com/JakHuang/form-generator) : 非常棒的可视化界面。
+
+`Electron` : windows桌面开发工具
 
 ## 下载加速器
 

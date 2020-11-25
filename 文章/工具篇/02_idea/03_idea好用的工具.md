@@ -21,6 +21,11 @@
 | InnerBuilder                                                 | 生成Build模式的方法                                          |                                                              |
 | JUnit Generator                                              | 测试用例生成工具                                             |                                                              |
 | JProfiles                                                    | 代码运行的工具检测，可以查看类方法的执行耗时时间             | 官网 : https://plugins.jetbrains.com/plugin/253-jprofiler 注册码 : https://blog.csdn.net/liyantianmin/article/details/86534544 |
-|                                                              |                                                              |                                                              |
-|                                                              |                                                              |                                                              |
+| Codota                                                       | 代码使用案例                                                 |                                                              |
+| .ignore                                                      | git文件忽略                                                  |                                                              |
+| Aixcoder code completer                                      | 代码智能补全                                                 |                                                              |
+| GitToolBox                                                   | git 工具                                                     |                                                              |
+| String Manipulation                                          | 驼峰 命名工具                                                |                                                              |
+
+
 
