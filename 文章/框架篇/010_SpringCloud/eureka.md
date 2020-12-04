@@ -15,8 +15,6 @@ Eureka Server 作为服务注册功能的服务器，它是服务注册中心。
 
 Eureka由两个组件组成：Eureka服务器和Eureka客户端。Eureka服务器用作服务注册服务器。Eureka客户端是一个java客户端，用来简化与服务器的交互、作为轮询负载均衡器，并提供服务的故障切换支持。Netflix在其生产环境中使用的是另外的客户端，它提供基于流量、资源利用率以及出错状态的加权负载均衡。 
 
-
-
 ## 实战
 
 pom.xml
@@ -76,10 +74,6 @@ eureka.client.serviceUrl.defaultZone=http://localhost:${server.port}/eureka/
 
 具体参考 : http://www.ityouknow.com/springcloud/2017/05/10/springcloud-eureka.html
 
-
-
-
-
 ## 服务的调用
 
 消费者需要通过注册中心去发现服务
@@ -103,12 +97,6 @@ spring.application.name=spring-cloud-producer
 > Feign是一个声明式Web Service客户端。使用Feign能让编写Web Service客户端更加简单, 它的使用方法是定义一个接口，然后在上面添加注解，同时也支持JAX-RS标准的注解。Feign也支持可拔插式的编码器和解码器。Spring Cloud对Feign进行了封装，使其支持了Spring MVC标准注解和HttpMessageConverters。Feign可以与Eureka和Ribbon组合使用以支持负载均衡。 
 
 [参考链接](http://www.ityouknow.com/springcloud/2017/05/12/eureka-provider-constomer.html)
-
-
-
-
-
-
 
 ## eureka 配置介绍
 
@@ -166,5 +154,39 @@ setStatusPageUrlPath
 setVirtualHostName
 ```
 
+# 实现原理
 
+**为什么要设置30秒?**
+
+1. 间隔时间过短，服务数量和机器数量很大的话，请求压力会非常大。
+
+> 假设服务100个，每个服务20台机器。那么实例就是2000个。
+>
+> eureka每30秒发送2次请求: 1. 拉取服务列表 2. 自身心跳
+>
+> 每分钟就是 4 * 2000 = 8000个请求
+>
+> 每秒就是 8000 / 60 = 133次 ，每秒也就是上百并发。
+>
+> 一天的话,就是千万级并发
+
+
+
+## Eureka的存储结构
+
+对应的类是 : `AbstractInstanceRegistry`
+
+存储的属性名叫: `register` 对应的实体结构是`ConcurrentHashMap`，也就是说是基于纯内存存储。
+
+### 如何设计这个缓存?
+
+
+
+
+
+
+
+基于`SpringBoot`配置服务端注册:
+
+入口类: `EurekaServerAutoConfiguration`
 
