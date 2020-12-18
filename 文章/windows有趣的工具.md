@@ -18,6 +18,8 @@
 
 Infinity: 新建标签页
 
+FeHelper : WEB前端助手
+
 ## 谷歌插件
 
   [谷歌插件排行](https://zhaoolee.com/ChromeAppHeroes/)
