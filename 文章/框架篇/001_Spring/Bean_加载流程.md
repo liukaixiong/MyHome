@@ -10,6 +10,40 @@
 
 
 
+gradle仓库构建
+
+
+
+基于`BeanDefinitionReader`进行解析
+
+XML解析的具体实现:`XmlBeanDefinitionReader`
+
+
+
+**基于XML的工厂实现** : `ClassPathXmlApplicationContext`
+
+**基于注解的工厂实现**: `AnnotationConfigApplicationContext`
+
+
+
+**事件传播器需要多了解**
+
+[循环依赖问题解读](https://www.cnblogs.com/grey-wolf/p/13034371.html#_label0)
+
+循环依赖
+
+如果发现有循环依赖的情况：
+
+通过三级缓存，提前将对象构建成ObjectFactory早期实例对象。
+
+动态代理的对象会存放在二级缓存中?
+
+一级缓存就是已经完整的bean对象.
+
+
+
+
+
 **Spring的Bean的生命周期**
 
 1. 实例化一个bean,也就是new
