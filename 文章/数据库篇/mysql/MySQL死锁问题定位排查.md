@@ -17,11 +17,28 @@ typora-root-url: img
 
 ### 如何定位死锁?
 
-Mysql中提供了最近一次死锁出现的语句。
+### 1. Mysql中提供了最近一次死锁出现的语句。
 
 ```sql
 show engine innodb status;
 ```
+
+### 2. 查看相关配置
+
+```sql
+-- 查看隔离级别
+select @@tx_isolation;
+-- 查看当前提交模式是否自动提交  0非自动提交 1自动提交
+select @@autocommit;
+-- 查看锁等待的超时时间
+SHOW VARIABLES LIKE '%innodb_lock_wait_timeout%';
+-- 查看当前持有锁的语句
+select * from information_schema.innodb_trx;
+```
+
+
+
+
 
 通过这个语句可以得到如下信息:[由于内容较多，只选举较重要的]
 
