@@ -26,6 +26,7 @@ public void init(ServletConfig config) throws ServletException {
     try {
         if (m_container == null) {
             // 指定默认的容器装载类 , 主要是读取META-INF/plexus/components.xml文件构造容器
+            // 相当于Spring中启动IOC容器components.xml相当于Spring的Bean.xml
             m_container = ContainerLoader.getDefaultContainer();
         }
 
@@ -71,8 +72,6 @@ public void init(ServletConfig config) throws ServletException {
 
 ## 告警模块
 
-
-
 告警模块
 
 ExceptionAlert
@@ -80,10 +79,6 @@ ExceptionAlert
 规则类型
 
 RuleType
-
-
-
-
 
 # 菜单栏
 
@@ -119,8 +114,6 @@ http://192.168.4.239:2281/cat/r/model/transaction/cat/CURRENT?op=xml&ip=All&requ
 
 ##  手写一个页面
 
-
-
 ## 开启CAT开发模式
 
 tomcat启动时加入参数:
@@ -130,8 +123,6 @@ tomcat启动时加入参数:
 ```
 
 加入之后日志会出现在控制台，包括异常
-
-
 
 ModelManager : 存储所有路由映射的handle
 
@@ -151,21 +142,31 @@ Model : MVC中的出参结果返回实体封装，页面上需要用到
 
 `ReportPage` : 
 
+相当于SpringMVC中的**@RequestMapping()**
+
 ```
 TOPHOUR("tophour", "tophour", "TopHour", "TopHour", true),
 ```
 
 `ReportModule`:
 
-```
+```java
 com.dianping.cat.report.page.tophour.Handler.class
 ```
+
+
+
+页面流程到达处理器:
+
+- com.dianping.cat.report.page
+  - transaction - 首页
+    - Handler - 直接处理器
 
 2. 配置文件
 
 components.xml
 
-```xnk
+```xml
 <!-- 类似于Spring中的IOC管理容器 role代表接口,implementation代表实现,requirements表示注入的实例，这里需要注意的是注入的实例必须由这个IOC容器管理 --> 
 <component>
 			<role>com.dianping.cat.report.page.tophour.Handler</role>
@@ -269,7 +270,7 @@ public void handleOutbound(Context ctx) throws ServletException, IOException {
 
 我们看CAT的源码发现它的Model和JDBC存放的位置在哪里?
 
-通常都是target/genrated-sources的dal-jdbc和dal-model中
+通常都是`target/genrated-sources`的dal-jdbc和dal-model中
 
 dal-model : 存放的是公共的基类
 
