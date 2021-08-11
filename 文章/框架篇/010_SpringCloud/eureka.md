@@ -17,7 +17,7 @@ Eureka由两个组件组成：Eureka服务器和Eureka客户端。Eureka服务�
 
 ## 实战
 
-pom.xml
+**pom.xml**
 
 ```xml
 <dependencies>
@@ -70,9 +70,9 @@ eureka.client.serviceUrl.defaultZone=http://localhost:${server.port}/eureka/
 - `eureka.client.fetch-registry` ：表示是否从Eureka Server获取注册信息，默认为true。
 - `eureka.client.serviceUrl.defaultZone` ：设置与Eureka Server交互的地址，查询服务和注册服务都需要依赖这个地址。默认是http://localhost:8761/eureka ；多个地址可使用 , 分隔。
 
-
-
 具体参考 : http://www.ityouknow.com/springcloud/2017/05/10/springcloud-eureka.html
+
+
 
 ## 服务的调用
 
@@ -80,15 +80,11 @@ eureka.client.serviceUrl.defaultZone=http://localhost:${server.port}/eureka/
 
 ###  如何判断该服务是消费者?
 
-`EnableDiscoveryClient`: 具有了服务注册的功能。启动工程后，就可以在注册中心的页面看到
+`EnableDiscoveryClient`: 具有了服务注册的功能。启动工程后，就可以在注册中心的页面看到服务。 
 
 ```
 spring.application.name=spring-cloud-producer
 ```
-
-服务。 
-
-
 
 ### 服务之间如何通讯?
 
@@ -162,9 +158,9 @@ setVirtualHostName
 
 > 假设服务100个，每个服务20台机器。那么实例就是2000个。
 >
-> eureka每30秒发送2次请求: 1. 拉取服务列表 2. 自身心跳
+> eureka每30秒发送2次请求: 1. 拉取服务列表 2. 自身心跳。
 >
-> 每分钟就是 4 * 2000 = 8000个请求
+> 每分钟就是 4 * 2000 = 8000个请求。
 >
 > 每秒就是 8000 / 60 = 133次 ，每秒也就是上百并发。
 >
@@ -174,19 +170,181 @@ setVirtualHostName
 
 ## Eureka的存储结构
 
-对应的类是 : `AbstractInstanceRegistry`
+对应的类是 : `AbstractInstanceRegistry`， 对应的具体实现类：`org.springframework.cloud.netflix.eureka.server.InstanceRegistry`
 
-存储的属性名叫: `register` 对应的实体结构是`ConcurrentHashMap`，也就是说是基于纯内存存储。
+存储的属性名叫: `registry` 对应的实体结构是`ConcurrentHashMap`，也就是说是基于纯内存存储。
 
-### 如何设计这个缓存?
-
-
-
-
-
-
+### eureka的服务端初始化流程
 
 基于`SpringBoot`配置服务端注册:
 
-入口类: `EurekaServerAutoConfiguration`
+入口类: `EurekaServerAutoConfiguration` 
+
+其中该类的静态方法才是初始化这个抽象实例注册的入口:
+
+`org.springframework.cloud.netflix.eureka.server.EurekaServerAutoConfiguration#peerAwareInstanceRegistry`
+
+看看这个类的关系图:
+
+![image-20210323183218593](eureka.assets/image-20210323183218593.png)
+
+
+
+从关系图中我们可以知道，在不集成Spring的情况下到达`PeerAwareInstanceRegistryImpl` 这个接口类基本上就OK了，但是为了集成Spring拿到`IOC`的上下文，所以才衍生了`InstanceRegistry`。
+
+`InstanceRegistry`还为注册、更新、取消提供了监听回调事件
+
+分别对应了:
+
+`EurekaInstanceRegisteredEvent`:  注册事件
+
+`EurekaInstanceRenewedEvent` : 更新事件
+
+`EurekaInstanceCanceledEvent` : 取消事件
+
+> 也就是说是一旦eureka发生该事件的时候，订阅该数据事件的类会被触发。
+
+
+
+### 客户端注册流程
+
+启动触发的配置类:
+
+`org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration.RefreshableEurekaClientConfiguration#eurekaClient`
+
+具体的客户端类:
+
+`com.netflix.discovery.DiscoveryClient`
+
+在构造方法里面初始化所有的流程
+
+其中包含核心的线程:
+
+- heartbeatExecutor : 心跳定时同步线程
+- cacheRefreshExecutor : 缓存刷新线程，用于获取注册中心的数据存放在本地
+- instanceInfoReplicator: 实例信息复制线程
+
+通过scheduler调度器来定时调度线程:
+
+**cacheRefreshExecutor**
+
+调度条件`eureka.client.fetch-registry`为`true`的情况
+
+调度时间相关配置
+
+- `eureka.client.registry-fetch-interval-seconds`设定的时间来调度默认30秒
+- `cache-eureka.client.cache-refresh-executor-exponential-back-off-bound`: 调用服务端缓存超时触发的延迟时间配置
+
+**具体的线程执行类: `com.netflix.discovery.DiscoveryClient.CacheRefreshThread**`
+
+**heartbeatExecutor**:
+
+调度条件`eureka.client.register-with-eureka`为`true`的情况
+
+调度时间相关配置:
+
+- `eureka.instance.lease-renewal-interval-in-seconds`: 心跳定时调度时间，默认30秒
+- `heartbeat-executor-exponential-back-off-bound`: 调用服务端缓存超时触发的延迟时间配置
+
+具体的线程执行器:`com.netflix.discovery.DiscoveryClient.HeartbeatThread`
+
+**instanceInfoReplicator**: 
+
+实例信息维护类: 负责维护租期的续约时间、到期时间。
+
+也就是维护`InstanceInfo`、`LeaseInfo`对象.
+
+
+
+`eureka.instance.lease-expiration-duration-in-seconds` : 续约的有效租期默认90秒
+
+
+
+`eureka.client.initial-instance-info-replication-interval-seconds` :  初始化实例信息复制的间隔秒数，默认40秒
+
+`eureka.client.instance-info-replication-interval-seconds`: 实例信息复制间隔， 默认30秒，也就是上一个参数40秒后下一次每次按照多少秒继续执行
+
+具体的执行器: `com.netflix.discovery.InstanceInfoReplicator`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 服务端注册流程
+
+com.netflix.eureka.registry.ResponseCacheImpl#readOnlyCacheMap
+
+com.netflix.eureka.registry.ResponseCacheImpl#readWriteCacheMap
+
+相关的配置属性:
+
+```yaml
+eureka.instance.lease-expiration-duration-in-seconds # 续约的到期时间 默认 90秒
+
+
+
+
+
+
+
+```
+
+1. 先从registry的Map中根据AppName获取对应的实例信息
+
+结构目录: 
+
+ - appName
+   	- instanceId: `Lease<InstanceInfo>`
+
+2. 根据实例的编号获取实例信息
+3. 判断本次客户端的实例信息中最后一次时间戳和注册缓存表里面的时间戳做比较：
+   1. 正常来说是相等的.
+   2. 不相等的情况，可能是网络出现异常，导致没有匹配上。也就是说的租约过期
+4. 重新签订一份新的租约，根据`lease-expiration-duration-in-seconds`来决定租约的过期时间
+5. 重新设置该服务的上线时间
+6. 然后加入注册表中
+7. 并将该实例信息的status设置为UP
+8. 将readWriteCacheMap缓存设置为无效
+
+### 客户端获取注册中心列表过程
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 客户端发送心跳过程
+
+
+
+
+
+
+
+
 

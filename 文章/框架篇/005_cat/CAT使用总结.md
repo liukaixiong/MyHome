@@ -33,23 +33,24 @@
 
       - mvn jetty:run
 
-      - 
-
-   2. 环境部署
-
-      1. linux可以参考cat/框架埋点方案集成/Dianping CAT 安装说明文档.md
-
-   3. 注意查看文档
-
+   
+   > 注意的是如果maven编译的时候，出现什么包找不到，类里面的包引用不到，直接找到计算机中的maven的lib包的文件夹找到对应的包删掉，重新下载。
+   
+2. 环境部署
+   
+   1. linux可以参考cat/框架埋点方案集成/Dianping CAT 安装说明文档.md
+   
+3. 注意查看文档
+   
       1. **cat/Dianping CAT 配置加载说明.md**
-      2. **Cat技术入门总结-0.1.0.doc**
-
-   4. 客户端集成
-
-      1. 一定要将CAT部署完的包全部上传到本地manve私服上面去
-
-         `cat/pom.xml`
-
+   2. **Cat技术入门总结-0.1.0.doc**
+   
+4. 客户端集成
+   
+   1. 一定要将CAT部署完的包全部上传到本地manve私服上面去
+   
+      `cat/pom.xml`
+   
       ```xml
        <distributionManagement>
       	   <repository>
@@ -63,28 +64,29 @@
             <!--</snapshotRepository>-->
          </distributionManagement>
       ```
-
-      	执行:`mvn clean package deploy -Dmaven.test.skip=true`
-
-      2. 客户端的服务
-
+   ```
+   
+   	执行:`mvn clean package deploy -Dmaven.test.skip=true`
+   
+   2. 客户端的服务
+   
          1. `META-INF/app.properties` 里面`app.name=cat-demo`
-         2. pom.xml
-
+      2. pom.xml
+   
          ```xml
           <dependency>
             <groupId>com.dianping.cat</groupId>
             <artifactId>cat-core</artifactId>
             <version>2.0.0</version>
          </dependency>
-         ```
-
-   5. 源码集成
-
+   ```
+   
+5. 源码集成
+   
       1. 进入https://github.com/dianping/cat/tree/mvn-repo地址
       2. 下载下来并且放入到本地Maven私服中
-      3. 注释掉不存在的maven引用
-
+   3. 注释掉不存在的maven引用
+   
       ```xml
       <!--<dependency>-->
         <!--<groupId>com.dianping.cat</groupId>-->
@@ -92,20 +94,150 @@
         <!--<version>${project.version}</version>-->
       <!--</dependency>-->
       ```
-
-      4. 启动jetty	
-
-   6. 邮件发送
-
+   ```
+   
+   4. 启动jetty	
+   ```
+   
+6. 邮件发送
+   
       1. 配置 - 登录 - 应用监控配置 - 异常报警配置 - 配置好你的项目名称 - 异常名称为 Total
       2. 全局告警配置 - 默认告警人 - 配置你的邮件 , 如果有多个以","分割
-      3. 如果需要修改点击弹到你的默认页面请修改 : resources/freemaker/`exceptionAlert.ftl`和 `thirdpartyAlert.ftl`两个模版内容
-
-   7. 与dubbo的总结
-
+   3. 如果需要修改点击弹到你的默认页面请修改 : resources/freemaker/`exceptionAlert.ftl`和 `thirdpartyAlert.ftl`两个模版内容
+   
+7. 与dubbo的总结
+   
       [dubbo的消息树构建](https://github.com/dubboclub/dubbo-plus)
 
 ## 功能
+
+### 配置相关
+
+#### 服务器
+
+`client.xml`
+
+```xml
+<config mode="client" xmlns:xsi="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="config.xsd">
+	<servers>
+		<server ip="127.0.0.1" port="2280" http-port="2281" enabled="true" />
+	</servers>
+</config>
+```
+
+`datasource.xml`
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<data-sources>
+	<data-source id="cat">
+		<maximum-pool-size>3</maximum-pool-size>
+		<connection-timeout>1s</connection-timeout>
+		<idle-timeout>10m</idle-timeout>
+		<statement-cache-size>1000</statement-cache-size>
+		<properties>
+			<driver>com.mysql.jdbc.Driver</driver>
+			<url><![CDATA[jdbc:mysql://192.168.0.11:3306/cat]]></url>
+			<user>root</user>
+			<password>Elab@123</password>
+			<connectionProperties><![CDATA[useUnicode=true&autoReconnect=true]]></connectionProperties>
+		</properties>
+	</data-source>
+	<data-source id="app">
+		<maximum-pool-size>3</maximum-pool-size>
+		<connection-timeout>1s</connection-timeout>
+		<idle-timeout>10m</idle-timeout>
+		<statement-cache-size>1000</statement-cache-size>
+		<properties>
+			<driver>com.mysql.jdbc.Driver</driver>
+			<url><![CDATA[jdbc:mysql://192.168.0.11:3306/cat]]></url>
+			<user>root</user>
+			<password>Elab@123</password>
+			<connectionProperties><![CDATA[useUnicode=true&autoReconnect=true]]></connectionProperties>
+		</properties>
+	</data-source>
+</data-sources>
+
+```
+
+#### 客户端
+
+调整应用配置
+
+`resources\META-INF\app.properties`
+
+```properties
+app.name=elab-marketing-user
+# 客户端存储队列长度
+cat.queue.length=5000
+# 构建成的消息树的长度
+cat.tree.max.length=2000
+```
+
+**调整日志级别以及日志位置**
+
+创建文件覆盖原始的日志位置
+
+`META-INF/plexus/plexus.xml`
+
+```xml
+<plexus>
+	<components>
+		<component>
+			<role>org.codehaus.plexus.logging.LoggerManager</role>
+			<implementation>org.unidal.lookup.logger.TimedConsoleLoggerManager</implementation>
+			<configuration>
+				<dateFormat>MM-dd HH:mm:ss.SSS</dateFormat>
+				<showClass>true</showClass>
+				<logFilePattern>cat_{0,date,yyyyMMdd}.log</logFilePattern>
+				<baseDirRef>CAT_HOME</baseDirRef>
+                <!-- 调整日志的位置 -->
+				<defaultBaseDir>/data/applogs/cat/xxx-project</defaultBaseDir>
+			</configuration>
+		</component>
+	</components>
+</plexus>
+```
+
+#### 数据库
+
+config:
+
+`serverFilter` : 
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<server-filter-config>
+   <transaction-type>Service</transaction-type>
+   <transaction-type>PigeonService</transaction-type>
+   <transaction-type>URL</transaction-type>
+   <transaction-name>piegonService:heartTaskService:heartBeat</transaction-name>
+   <transaction-name>pigeon:HeartBeatService:null</transaction-name>
+   <transaction-name></transaction-name>
+   <transaction-name>/</transaction-name>
+   <transaction-name>/index.jsp</transaction-name>
+   <transaction-name>/Heartbeat.html</transaction-name>
+   <transaction-name>/heartbeat.jsp</transaction-name>
+   <transaction-name>/inspect/healthcheck</transaction-name>
+   <transaction-name>/MonitorServlet</transaction-name>
+   <transaction-name>/monitorServlet?client=f5</transaction-name>
+   
+   <domain>PhoenixAgent</domain>
+   <domain></domain>
+   <domain>cat-agent</domain>
+   <domain>All</domain>
+   <domain>FrontEnd</domain>
+   <domain>paas</domain>
+   <domain>SMS-RECEIVER</domain>
+   
+   <atomic-tree-config start-types="Cache.;Squirrel." match-types="SQL"/>
+</server-filter-config>
+
+```
+
+
+
+
 
 ### 报表模块(Heartbeat)
 
@@ -276,4 +408,6 @@ optimize table daily_report_content;
 optimize table hourly_report_content;
 optimize table graph;
 ```
+
+
 
