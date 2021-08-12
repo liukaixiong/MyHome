@@ -2,53 +2,380 @@
 
 ![1519450795168](image/wz_img/1519450795168.png)
 
+##   
 
+[19年知识汇总目录.md](.\文章\19年知识汇总目录.md)
 
-## java基础篇
+## book
+-	[JAVA核心知识点整理.pdf](.\文章\book\JAVA核心知识点整理.pdf)
+-	[jksj_book.zip](.\文章\book\jksj_book.zip)
+## python
+-	[01_环境搭建.md](.\文章\python\01_环境搭建.md)
+-	[02_环境部署.md](.\文章\python\02_环境部署.md)
+-	[03_模拟点击.md](.\文章\python\03_模拟点击.md)
+-	[04_脚本.md](.\文章\python\04_脚本.md)
+-	[github项目.md](.\文章\python\github项目.md)
+-	[python使用总结.md](.\文章\python\python使用总结.md)
+-	[scrapy_爬虫.md](.\文章\python\scrapy_爬虫.md)
+	[tx-lcn 介绍.md](.\文章\tx-lcn 介绍.md)
+	[windows有趣的工具.md](.\文章\windows有趣的工具.md)
+## 其他
+-	[01_情话.md](.\文章\其他\01_情话.md)
+-	[02_哲理.md](.\文章\其他\02_哲理.md)
+-	[03_长沙买房.md](.\文章\其他\03_长沙买房.md)
+-	[租房总结.md](.\文章\其他\租房总结.md)
+-	[读书改变思维.md](.\文章\其他\读书改变思维.md)
+## 前端篇
+### VUE
+--	[01_环境搭建](.\文章\前端篇\VUE\01_环境搭建)
+--	[02_基本命令.md](.\文章\前端篇\VUE\02_基本命令.md)
+## 基础篇
+### 001_JVM
+--	[01_类加载机制.md](.\文章\基础篇\001_JVM\01_类加载机制.md)
+--	[01_类加载机制.xmind](.\文章\基础篇\001_JVM\01_类加载机制.xmind)
+--	[02_JVM内存结构.md](.\文章\基础篇\001_JVM\02_JVM内存结构.md)
+--	[02_JVM内存结构.xmind](.\文章\基础篇\001_JVM\02_JVM内存结构.xmind)
+--	[03_JVM回收算法.md](.\文章\基础篇\001_JVM\03_JVM回收算法.md)
+--	[03_JVM回收算法.xmind](.\文章\基础篇\001_JVM\03_JVM回收算法.xmind)
+--	[04_JVM内存模型.md](.\文章\基础篇\001_JVM\04_JVM内存模型.md)
+--	[05_JVM体系结构与GC调优.ppt](.\文章\基础篇\001_JVM\05_JVM体系结构与GC调优.ppt)
+--	[06_JVM命令介绍.md](.\文章\基础篇\001_JVM\06_JVM命令介绍.md)
+--	[07_GC诊断.md](.\文章\基础篇\001_JVM\07_GC诊断.md)
+--	[07_JVM性能参数.md](.\文章\基础篇\001_JVM\07_JVM性能参数.md)
+--	[JVM总体梳理.md](.\文章\基础篇\001_JVM\JVM总体梳理.md)
+--	[JVM面试集锦.md](.\文章\基础篇\001_JVM\JVM面试集锦.md)
+### 002_io
+--	[IO笔记记录.md](.\文章\基础篇\002_io\IO笔记记录.md)
+--	[同步、异步、阻塞、非阻塞.md](.\文章\基础篇\002_io\同步、异步、阻塞、非阻塞.md)
+--	[监听文件变更.md](.\文章\基础篇\002_io\监听文件变更.md)
+### 003_多线程
+--	[0201_线程栈.md](.\文章\基础篇\003_多线程\0201_线程栈.md)
+--	[02_线程池的原理总结.md](.\文章\基础篇\003_多线程\02_线程池的原理总结.md)
+--	[java线程池笔记.md](.\文章\基础篇\003_多线程\java线程池笔记.md)
+### 006_Lambda
+--	[Lambda.md](.\文章\基础篇\006_Lambda\Lambda.md)
+### 007_设计模式
+--	[01_面向对象的设计原则.xmind](.\文章\基础篇\007_设计模式\01_面向对象的设计原则.xmind)
+--	[head first 设计模式.md](.\文章\基础篇\007_设计模式\head first 设计模式.md)
+--	[单例模式.md](.\文章\基础篇\007_设计模式\单例模式.md)
+--	[工厂模式.md](.\文章\基础篇\007_设计模式\工厂模式.md)
+--	[建造者模式.md](.\文章\基础篇\007_设计模式\建造者模式.md)
+--	[模式介绍.md](.\文章\基础篇\007_设计模式\模式介绍.md)
+### 008_集合篇
+--	[List-ArrayList中的sort排序.md](.\文章\基础篇\008_集合篇\List-ArrayList中的sort排序.md)
+--	[List-LinkedList的实现.md](.\文章\基础篇\008_集合篇\List-LinkedList的实现.md)
+--	[Map-ConcurrentHashMap源码阅读笔记.md](.\文章\基础篇\008_集合篇\Map-ConcurrentHashMap源码阅读笔记.md)
+--	[Map-Java之HashMap源码阅读.md](.\文章\基础篇\008_集合篇\Map-Java之HashMap源码阅读.md)
+### 009_并发
+--	[01_AQS介绍.md](.\文章\基础篇\009_并发\01_AQS介绍.md)
+--	[01_CountDownLatch_CyclicBarrier.md](.\文章\基础篇\009_并发\01_CountDownLatch_CyclicBarrier.md)
+--	[CAS原子性操作.md](.\文章\基础篇\009_并发\CAS原子性操作.md)
+--	[lock.asta](.\文章\基础篇\009_并发\lock.asta)
+--	[ReentrantLock 代码解读.md](.\文章\基础篇\009_并发\ReentrantLock 代码解读.md)
+--	[ReentrantLock-Condition解读.md](.\文章\基础篇\009_并发\ReentrantLock-Condition解读.md)
+--	[ReentrantLock解读.xmind](.\文章\基础篇\009_并发\ReentrantLock解读.xmind)
+--	[volatile关键字解析.md](.\文章\基础篇\009_并发\volatile关键字解析.md)
+--	[并发知识点.xmind](.\文章\基础篇\009_并发\并发知识点.xmind)
+--	[并发编程艺术.md](.\文章\基础篇\009_并发\并发编程艺术.md)
+--	[手动实现ArrayBlockingQueue思路.xmind](.\文章\基础篇\009_并发\手动实现ArrayBlockingQueue思路.xmind)
+--	[笔记.md](.\文章\基础篇\009_并发\笔记.md)
+--	[锁的概念.md](.\文章\基础篇\009_并发\锁的概念.md)
+### 010_Netty
+--	[01_Netty简介.md](.\文章\基础篇\010_Netty\01_Netty简介.md)
+--	[Reactor模式.md](.\文章\基础篇\010_Netty\Reactor模式.md)
+### 010_算法
+--	[01_算法笔记.md](.\文章\基础篇\010_算法\01_算法笔记.md)
+--	[02_时间轮.md](.\文章\基础篇\010_算法\02_时间轮.md)
+--	[第三方接口对接鉴权.md](.\文章\基础篇\010_算法\第三方接口对接鉴权.md)
 
-### `001_JVM系列`
+### 011_数据结构
+#### 001_Map
+---	[01_简介.md](.\文章\基础篇\011_数据结构\001_Map\01_简介.md)
+### 012_工具类
+--	[01_Spring.md](.\文章\基础篇\012_工具类\01_Spring.md)
+### 013_HTTP
+--	[HTTP请求过程.md](.\文章\基础篇\013_HTTP\HTTP请求过程.md)
+	[学习输出结果导图.xmind](.\文章\学习输出结果导图.xmind)
+## 工具篇
+### 01_maven
+--	[01_maven规范.md](.\文章\工具篇\01_maven\01_maven规范.md)
+### 02_idea
+--	[01_Jrebel.md](.\文章\工具篇\02_idea\01_Jrebel.md)
+--	[02_git.md](.\文章\工具篇\02_idea\02_git.md)
+--	[03_idea好用的工具.md](.\文章\工具篇\02_idea\03_idea好用的工具.md)
+--	[IDEA配置.md](.\文章\工具篇\02_idea\IDEA配置.md)
+--	[新建文本文档.txt](.\文章\工具篇\02_idea\新建文本文档.txt)
+### 03_excel
+--	[excel的常用操作.md](.\文章\工具篇\03_excel\excel的常用操作.md)
+## 思路篇
+### 01_服务化
+--	[微服务落地.md](.\文章\思路篇\01_服务化\微服务落地.md)
+### 02_优化
+--	[tomcat优化.md](.\文章\思路篇\02_优化\tomcat优化.md)
+--	[常用优化方案.md](.\文章\思路篇\02_优化\常用优化方案.md)
+--	[性能工具.md](.\文章\思路篇\02_优化\性能工具.md)
+--	[系统性能调优必知必会.md](.\文章\思路篇\02_优化\系统性能调优必知必会.md)
+### 03_线上发布
+--	[灰度发布.md](.\文章\思路篇\03_线上发布\灰度发布.md)
+## 数据库篇
+### mycat
+--	[mycat记录.md](.\文章\数据库篇\mycat\mycat记录.md)
+### mysql
+--	[Mysql备份恢复.md](.\文章\数据库篇\mysql\Mysql备份恢复.md)
+--	[MySQL数据库优化.md](.\文章\数据库篇\mysql\MySQL数据库优化.md)
+--	[MySQL死锁问题定位排查.md](.\文章\数据库篇\mysql\MySQL死锁问题定位排查.md)
+--	[mysql迁移数据.md](.\文章\数据库篇\mysql\mysql迁移数据.md)
+--	[PMM安装.md](.\文章\数据库篇\mysql\PMM安装.md)
+--	[同步binLog](.\文章\数据库篇\mysql\同步binLog)
+--	[大表修改.md](.\文章\数据库篇\mysql\大表修改.md)
+--	[常用SQL.md](.\文章\数据库篇\mysql\常用SQL.md)
+--	[性能优化.md](.\文章\数据库篇\mysql\性能优化.md)
+--	[性能优化手段.md](.\文章\数据库篇\mysql\性能优化手段.md)
+--	[数据库使用规范.md](.\文章\数据库篇\mysql\数据库使用规范.md)
+--	[简单介绍.md](.\文章\数据库篇\mysql\简单介绍.md)
+--	[索引分析.md](.\文章\数据库篇\mysql\索引分析.md)
+--	[索引类型.md](.\文章\数据库篇\mysql\索引类型.md)
+--	[锁.md](.\文章\数据库篇\mysql\锁.md)
 
-### `002_IO/NIO`
+### redis
+--	[redis 命令.md](.\文章\数据库篇\redis\redis 命令.md)
 
-### `003_多线程`
+## 服务器篇
+### 01_命令
+--	[00_常用的linux命令介绍.md](.\文章\服务器篇\01_命令\00_常用的linux命令介绍.md)
+--	[01_授权.md](.\文章\服务器篇\01_命令\01_授权.md)
+--	[02_用户授权.md](.\文章\服务器篇\01_命令\02_用户授权.md)
+--	[git.md](.\文章\服务器篇\01_命令\git.md)
+--	[Mysql.md](.\文章\服务器篇\01_命令\Mysql.md)
+--	[定时任务.md](.\文章\服务器篇\01_命令\定时任务.md)
+### 02_环境搭建
+#### 01_zabbix
+---	[01_zabbix环境搭建.md](.\文章\服务器篇\02_环境搭建\01_zabbix\01_zabbix环境搭建.md)
+---	[01_安装zabbix记录.md](.\文章\服务器篇\02_环境搭建\01_zabbix\01_安装zabbix记录.md)
+#### 02_Grafana
+---	[01_安装与搭建.md](.\文章\服务器篇\02_环境搭建\02_Grafana\01_安装与搭建.md)
+---	[02_Grafana插件安装并接入zabbix数据源.md](.\文章\服务器篇\02_环境搭建\02_Grafana\02_Grafana插件安装并接入zabbix数据源.md)
+---	[自定义脚本.md](.\文章\服务器篇\02_环境搭建\02_Grafana\自定义脚本.md)
+--	[02_jdk.md](.\文章\服务器篇\02_环境搭建\02_jdk.md)
+--	[03_nodejs.md](.\文章\服务器篇\02_环境搭建\03_nodejs.md)
+#### 03_prometheus
+---	[01_环境搭建.md](.\文章\服务器篇\02_环境搭建\03_prometheus\01_环境搭建.md)
+---	[prometheus介绍.md](.\文章\服务器篇\02_环境搭建\03_prometheus\prometheus介绍.md)
+--	[04_nginx_linux.md](.\文章\服务器篇\02_环境搭建\04_nginx_linux.md)
+--	[05_mysql.md](.\文章\服务器篇\02_环境搭建\05_mysql.md)
+--	[06_jekins.md](.\文章\服务器篇\02_环境搭建\06_jekins.md)
+--	[07_git.md](.\文章\服务器篇\02_环境搭建\07_git.md)
+--	[08_mongodb.md](.\文章\服务器篇\02_环境搭建\08_mongodb.md)
+--	[maxwell.md](.\文章\服务器篇\02_环境搭建\maxwell.md)
+### 04_问题排查
+--	[arthas.md](.\文章\服务器篇\04_问题排查\arthas.md)
+--	[breace.md](.\文章\服务器篇\04_问题排查\breace.md)
+--	[CPU过高.md](.\文章\服务器篇\04_问题排查\CPU过高.md)
+--	[ESTABLISHED连接数.md](.\文章\服务器篇\04_问题排查\ESTABLISHED连接数.md)
+--	[socket.md](.\文章\服务器篇\04_问题排查\socket.md)
+--	[内存过大.md](.\文章\服务器篇\04_问题排查\内存过大.md)
+--	[日志排查.md](.\文章\服务器篇\04_问题排查\日志排查.md)
 
-### `004_Socket`
+#### 服务器优化
+---	[01_性能指标.md](.\文章\服务器篇\04_问题排查\服务器优化\01_性能指标.md)
+---	[02  基础篇：到底应该怎么理解“平均负载”.md](.\文章\服务器篇\04_问题排查\服务器优化\02  基础篇：到底应该怎么理解“平均负载”.md)
+---	[03  基础篇：经常说的 CPU 上下文切换是什么意思.md](.\文章\服务器篇\04_问题排查\服务器优化\03  基础篇：经常说的 CPU 上下文切换是什么意思.md)
+--	[流量过高.md](.\文章\服务器篇\04_问题排查\流量过高.md)
+--	[磁盘使用情况.md](.\文章\服务器篇\04_问题排查\磁盘使用情况.md)
 
-### `005_RMI`
+### 05_脚本保存
+--	[beifen.sh](.\文章\服务器篇\05_脚本保存\beifen.sh)
+#### git
+---	[createBranch.cmd](.\文章\服务器篇\05_脚本保存\git\createBranch.cmd)
+---	[dm-2b-ios.cmd](.\文章\服务器篇\05_脚本保存\git\dm-2b-ios.cmd)
+---	[elab-marketing-platform.cmd](.\文章\服务器篇\05_脚本保存\git\elab-marketing-platform.cmd)
+---	[h5-dm-component.cmd](.\文章\服务器篇\05_脚本保存\git\h5-dm-component.cmd)
+---	[h5dm-barley-backstage.cmd](.\文章\服务器篇\05_脚本保存\git\h5dm-barley-backstage.cmd)
+---	[h5dm-elab-backstage.cmd](.\文章\服务器篇\05_脚本保存\git\h5dm-elab-backstage.cmd)
+---	[h5dm-launch.cmd](.\文章\服务器篇\05_脚本保存\git\h5dm-launch.cmd)
+---	[h5dm-mini-program.cmd](.\文章\服务器篇\05_脚本保存\git\h5dm-mini-program.cmd)
 
-### `006_Lambda`
-
-### `007_设计模式`
-
-### `008_集合篇`
-
+#### jenkins
+---	[Spring-boot.md](.\文章\服务器篇\05_脚本保存\jenkins\Spring-boot.md)
+---	[web-应用.md](.\文章\服务器篇\05_脚本保存\jenkins\web-应用.md)
+#### linux
+---	[OOS相关.md](.\文章\服务器篇\05_脚本保存\linux\OOS相关.md)
+---	[迁移服务器.md](.\文章\服务器篇\05_脚本保存\linux\迁移服务器.md)
+#### spring-boot
+---	[spring-boot.sh](.\文章\服务器篇\05_脚本保存\spring-boot\spring-boot.sh)
+--	[脚本总结命令.md](.\文章\服务器篇\05_脚本保存\脚本总结命令.md)
+### 11_阿里云
+--	[01_磁盘在线扩容.md](.\文章\服务器篇\11_阿里云\01_磁盘在线扩容.md)
+-	[linux服务器黑科技.md](.\文章\服务器篇\linux服务器黑科技.md)
 ## 框架篇
+### 001_Spring
+--	[001_Spring生命周期.xmind](.\文章\框架篇\001_Spring\001_Spring生命周期.xmind)
+--	[002_Spring拓展点.xmind](.\文章\框架篇\001_Spring\002_Spring拓展点.xmind)
+--	[99_BeanFactory.md](.\文章\框架篇\001_Spring\99_BeanFactory.md)
+--	[AOP-Aspect 调用过程.md](.\文章\框架篇\001_Spring\AOP-Aspect 调用过程.md)
+--	[AOP-事物运行原理机制.md](.\文章\框架篇\001_Spring\AOP-事物运行原理机制.md)
+--	[BeanDefintion.md](.\文章\框架篇\001_Spring\BeanDefintion.md)
+--	[Bean_加载流程.md](.\文章\框架篇\001_Spring\Bean_加载流程.md)
+--	[Spring 总结.md](.\文章\框架篇\001_Spring\Spring 总结.md)
+--	[Spring_ 5.md](.\文章\框架篇\001_Spring\Spring_ 5.md)
+--	[Spring_零配置.md](.\文章\框架篇\001_Spring\Spring_零配置.md)
+--	[Spring拓展点.md](.\文章\框架篇\001_Spring\Spring拓展点.md)
+--	[Spring有意思的参考类.md](.\文章\框架篇\001_Spring\Spring有意思的参考类.md)
+--	[请求参数源码.md](.\文章\框架篇\001_Spring\请求参数源码.md)
+### 001_Spring-boot
+--	[01_使用记录.md](.\文章\框架篇\001_Spring-boot\01_使用记录.md)
+--	[02_简单介绍.md](.\文章\框架篇\001_Spring-boot\02_简单介绍.md)
+--	[03_源码记录.md](.\文章\框架篇\001_Spring-boot\03_源码记录.md)
+--	[88_lockback.md](.\文章\框架篇\001_Spring-boot\88_lockback.md)
+--	[A_Conditional.md](.\文章\框架篇\001_Spring-boot\A_Conditional.md)
+--	[A_SpringBootApplication.md](.\文章\框架篇\001_Spring-boot\A_SpringBootApplication.md)
+--	[quarz.md](.\文章\框架篇\001_Spring-boot\quarz.md)
+--	[SpringBoot+Thymeleaf.md](.\文章\框架篇\001_Spring-boot\SpringBoot+Thymeleaf.md)
+--	[thymeleaf操作记录.md](.\文章\框架篇\001_Spring-boot\thymeleaf操作记录.md)
+--	[配置记录.md](.\文章\框架篇\001_Spring-boot\配置记录.md)
+### 001_SpringMVC
+--	[001_handleMapping映射过程记录.md](.\文章\框架篇\001_SpringMVC\001_handleMapping映射过程记录.md)
+--	[002_功能类.md](.\文章\框架篇\001_SpringMVC\002_功能类.md)
+### 002_mybatis
+--	[Mybatis 框架细节探究.md](.\文章\框架篇\002_mybatis\Mybatis 框架细节探究.md)
+--	[Mybatis_0.md](.\文章\框架篇\002_mybatis\Mybatis_0.md)
+### 003_tomcat
+--	[tomcat-性能调优.md](.\文章\框架篇\003_tomcat\tomcat-性能调优.md)
+--	[tomcat-架构-小马哥.md](.\文章\框架篇\003_tomcat\tomcat-架构-小马哥.md)
+--	[咕泡-小马哥-tomcat.md](.\文章\框架篇\003_tomcat\咕泡-小马哥-tomcat.md)
+### 004_jdbcTemplate
+--	[jdbcTemplate.md](.\文章\框架篇\004_jdbcTemplate\jdbcTemplate.md)
+### 005_cat
+--	[00_cat_框架模块.md](.\文章\框架篇\005_cat\00_cat_框架模块.md)
+--	[01_cat_code_logViews.md](.\文章\框架篇\005_cat\01_cat_code_logViews.md)
+--	[Cat+Feign整合调用链路.md](.\文章\框架篇\005_cat\Cat+Feign整合调用链路.md)
+--	[CAT_报警.md](.\文章\框架篇\005_cat\CAT_报警.md)
+--	[CAT使用总结 - 副本.md](.\文章\框架篇\005_cat\CAT使用总结 - 副本.md)
+--	[CAT使用总结.md](.\文章\框架篇\005_cat\CAT使用总结.md)
+--	[消息丢失记录.md](.\文章\框架篇\005_cat\消息丢失记录.md)
+--	[消息处理流程.md](.\文章\框架篇\005_cat\消息处理流程.md)
+### 007_disconf
+--	[disconf.md](.\文章\框架篇\007_disconf\disconf.md)
+### 008_swagger
+--	[swagger_关键源码记录.md](.\文章\框架篇\008_swagger\swagger_关键源码记录.md)
+--	[swagger使用记录.md](.\文章\框架篇\008_swagger\swagger使用记录.md)
+### 009_dubbo
+--	[002_对比SpringCloud.md](.\文章\框架篇\009_dubbo\002_对比SpringCloud.md)
+--	[源码_001_启动流程.md](.\文章\框架篇\009_dubbo\源码_001_启动流程.md)
+### 010_Junit
+--	[Junit测试.md](.\文章\框架篇\010_Junit\Junit测试.md)
+### 010_SpringCloud
+--	[eureka.md](.\文章\框架篇\010_SpringCloud\eureka.md)
+--	[feign.md](.\文章\框架篇\010_SpringCloud\feign.md)
+--	[gateway.md](.\文章\框架篇\010_SpringCloud\gateway.md)
+--	[Hystrix.md](.\文章\框架篇\010_SpringCloud\Hystrix.md)
+--	[ribbon.md](.\文章\框架篇\010_SpringCloud\ribbon.md)
+--	[websocket.md](.\文章\框架篇\010_SpringCloud\websocket.md)
+--	[websocket_doc.md](.\文章\框架篇\010_SpringCloud\websocket_doc.md)
 
-### `Spring系列`
+#### zuul
+---	[zuul原理.md](.\文章\框架篇\010_SpringCloud\zuul\zuul原理.md)
+--	[zuul.md](.\文章\框架篇\010_SpringCloud\zuul.md)
+--	[优化记录.md](.\文章\框架篇\010_SpringCloud\优化记录.md)
+--	[其他.md](.\文章\框架篇\010_SpringCloud\其他.md)
+--	[配置优化.md](.\文章\框架篇\010_SpringCloud\配置优化.md)
+### 012_zookeeper
+--	[01_基本介绍.md](.\文章\框架篇\012_zookeeper\01_基本介绍.md)
+### 020_Netty
+--	[00_传统的IO模型.md](.\文章\框架篇\020_Netty\00_传统的IO模型.md)
+--	[01_Netty介绍.md](.\文章\框架篇\020_Netty\01_Netty介绍.md)
+--	[02_sofa-bolt.md](.\文章\框架篇\020_Netty\02_sofa-bolt.md)
+--	[03_netty线程池.md](.\文章\框架篇\020_Netty\03_netty线程池.md)
+--	[04_selector.md](.\文章\框架篇\020_Netty\04_selector.md)
+--	[99_Netty笔记.md](.\文章\框架篇\020_Netty\99_Netty笔记.md)
+--	[Netty结构梳理.xmind](.\文章\框架篇\020_Netty\Netty结构梳理.xmind)
+--	[学习Netty的好的项目参考.md](.\文章\框架篇\020_Netty\学习Netty的好的项目参考.md)
+#### 资料
+---	[01-Netty实战与源码分析-BIO.pptx](.\文章\框架篇\020_Netty\资料\01-Netty实战与源码分析-BIO.pptx)
+---	[01-Netty实战与源码分析-NIO.pptx](.\文章\框架篇\020_Netty\资料\01-Netty实战与源码分析-NIO.pptx)
+---	[02-Netty实战与源码分析-BIO.pptx](.\文章\框架篇\020_Netty\资料\02-Netty实战与源码分析-BIO.pptx)
+---	[02-Netty实战与源码分析-NIO.pptx](.\文章\框架篇\020_Netty\资料\02-Netty实战与源码分析-NIO.pptx)
+---	[04-Netty-02课堂笔记.md](.\文章\框架篇\020_Netty\资料\04-Netty-02课堂笔记.md)
+---	[04-实时推送平台.pdf](.\文章\框架篇\020_Netty\资料\04-实时推送平台.pdf)
+---	[05-实时推送平台.pdf](.\文章\框架篇\020_Netty\资料\05-实时推送平台.pdf)
+---	[07-Buffer API.pdf](.\文章\框架篇\020_Netty\资料\07-Buffer API.pdf)
+---	[07-Netty笔记之ChannelHandler.pdf](.\文章\框架篇\020_Netty\资料\07-Netty笔记之ChannelHandler.pdf)
+---	[08-Netty源码分析之服务端启动&EventLoop.pdf](.\文章\框架篇\020_Netty\资料\08-Netty源码分析之服务端启动&EventLoop.pdf)
+---	[09-Netty 源码分析之EventLoop.pdf](.\文章\框架篇\020_Netty\资料\09-Netty 源码分析之EventLoop.pdf)
+### 021_zookeeper
+--	[01_介绍.md](.\文章\框架篇\021_zookeeper\01_介绍.md)
+### 022_rxjava
+--	[RxJava.md](.\文章\框架篇\022_rxjava\RxJava.md)
+### 023_rocketmq
+--	[3_RocketMQ设计手册.pdf](.\文章\框架篇\023_rocketmq\3_RocketMQ设计手册.pdf)
+--	[broker-a.properties](.\文章\框架篇\023_rocketmq\broker-a.properties)
+--	[broker-b-s.properties](.\文章\框架篇\023_rocketmq\broker-b-s.properties)
+--	[mq-mkdir.sh](.\文章\框架篇\023_rocketmq\mq-mkdir.sh)
+--	[RMQ问题记录.md](.\文章\框架篇\023_rocketmq\RMQ问题记录.md)
+--	[rocketmq_运维.md](.\文章\框架篇\023_rocketmq\rocketmq_运维.md)
+--	[rocketmq介绍.md](.\文章\框架篇\023_rocketmq\rocketmq介绍.md)
+--	[RocketMq实战与原理解析.md](.\文章\框架篇\023_rocketmq\RocketMq实战与原理解析.md)
+--	[RocketMQ方案.md](.\文章\框架篇\023_rocketmq\RocketMQ方案.md)
+--	[ShardingJDBC方案.md](.\文章\框架篇\023_rocketmq\ShardingJDBC方案.md)
+#### 源码实战
+---	[Broker.md](.\文章\框架篇\023_rocketmq\源码实战\Broker.md)
+---	[message.md](.\文章\框架篇\023_rocketmq\源码实战\message.md)
+---	[NameServer.md](.\文章\框架篇\023_rocketmq\源码实战\NameServer.md)
+### 024_elasticsearch
+--	[client.md](.\文章\框架篇\024_elasticsearch\client.md)
+--	[介绍.md](.\文章\框架篇\024_elasticsearch\介绍.md)
+--	[文档笔记.md](.\文章\框架篇\024_elasticsearch\文档笔记.md)
+--	[模版.md](.\文章\框架篇\024_elasticsearch\模版.md)
+--	[索引管理.md](.\文章\框架篇\024_elasticsearch\索引管理.md)
+--	[运维.md](.\文章\框架篇\024_elasticsearch\运维.md)
+### 025_prometheus
+--	[prometheus介绍.md](.\文章\框架篇\025_prometheus\prometheus介绍.md)
+### 026_shardingsphere
+--	[01_环境搭建.md](.\文章\框架篇\026_shardingsphere\01_环境搭建.md)
+### 027_readis
+#### redisson
+---	[01_redisson应用.md](.\文章\框架篇\027_readis\redisson\01_redisson应用.md)
+### 030_aliyun
+--	[数据订阅DTS.md](.\文章\框架篇\030_aliyun\数据订阅DTS.md)
+### 999_github开源项目
+--	[Jupiter.md](.\文章\框架篇\999_github开源项目\Jupiter.md)
+### mybatis
+--	[Mybatis_0.md](.\文章\框架篇\mybatis\Mybatis_0.md)
+-	[源码总结.md](.\文章\框架篇\源码总结.md)
+	[流程图.asta](.\文章\流程图.asta)
+## 笔记篇
+-	[01_亿级流量网站架构核心技术.md](.\文章\笔记篇\01_亿级流量网站架构核心技术.md)
+-	[02_Java工程师修炼之道.md](.\文章\笔记篇\02_Java工程师修炼之道.md)
+-	[03_springBoot编程思想.md](.\文章\笔记篇\03_springBoot编程思想.md)
+-	[03_高性能mysql.md](.\文章\笔记篇\03_高性能mysql.md)
+### 极客时间
+--	[Mysql实战45讲.md](.\文章\笔记篇\极客时间\Mysql实战45讲.md)
+--	[Netty源码剖析与实战.md](.\文章\笔记篇\极客时间\Netty源码剖析与实战.md)
+## 缓存篇
+--	[01_redis简介.md](.\文章\缓存篇\redis\01_redis简介.md)
+--	[redssion看门狗.md](.\文章\缓存篇\redis\redssion看门狗.md)
+	[网址.md](.\文章\网址.md)
+## 面试篇
+-	[01_常规面试.md](.\文章\面试篇\01_常规面试.md)
+-	[02_基础面试.md](.\文章\面试篇\02_基础面试.md)
+-	[03_tomcat调优篇.md](.\文章\面试篇\03_tomcat调优篇.md)
+-	[03_高级面试.md](.\文章\面试篇\03_高级面试.md)
+-	[04_高级面试.md](.\文章\面试篇\04_高级面试.md)
+-	[05_高级面试02.md](.\文章\面试篇\05_高级面试02.md)
+-	[07_大数据算法.md](.\文章\面试篇\07_大数据算法.md)
+-	[08_Spring相关.md](.\文章\面试篇\08_Spring相关.md)
+-	[HR.md](.\文章\面试篇\HR.md)
+-	[RocketMQ方案.pdf](.\文章\面试篇\RocketMQ方案.pdf)
+### 其他面试资料
+--	[1MyBatis面试专题及答案.pdf](.\文章\面试篇\其他面试资料\1MyBatis面试专题及答案.pdf)
+--	[1开源框架面试专题及答案.pdf](.\文章\面试篇\其他面试资料\1开源框架面试专题及答案.pdf)
+--	[46个经典Linux面试题！.pdf](.\文章\面试篇\其他面试资料\46个经典Linux面试题！.pdf)
+--	[Kafka消息中间件面试专题.pdf](.\文章\面试篇\其他面试资料\Kafka消息中间件面试专题.pdf)
+--	[Netty面试专题及答案.pdf](.\文章\面试篇\其他面试资料\Netty面试专题及答案.pdf)
+--	[SpringBoot面试专题及答案.pdf](.\文章\面试篇\其他面试资料\SpringBoot面试专题及答案.pdf)
+--	[SpringMVC面试专题及答案.pdf](.\文章\面试篇\其他面试资料\SpringMVC面试专题及答案.pdf)
+--	[健Change's面经分享.pdf](.\文章\面试篇\其他面试资料\健Change's面经分享.pdf)
+--	[小霸王面经.pdf](.\文章\面试篇\其他面试资料\小霸王面经.pdf)
 
-
-
-###  `Spring-boot`
-
-
-
-### `Mybatis系列`
-
-
-
-### `Netty系列`
-
-
-
-## 分布式篇
-
-### `Redis`
-
-### `Dubbo`
-
-### `Zookeeper`
-
-### `MyCat`
-
-### `CAT`
-
+-	[消息队列.md](.\文章\面试篇\消息队列.md)
+-	[算法总结.md](.\文章\面试篇\算法总结.md)

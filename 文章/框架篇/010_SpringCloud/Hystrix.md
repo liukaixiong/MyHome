@@ -74,7 +74,7 @@ Hystrix-dashboard是一款针对Hystrix进行实时监控的工具，通过Hystr
 
 ### 1、添加依赖
 
-```
+```xml
 <dependencies>
 	<dependency>
 		<groupId>org.springframework.cloud</groupId>
@@ -127,3 +127,295 @@ public class DashboardApplication {
 
 }
 ```
+
+## Hystrix 集成 RestTemplate
+
+
+
+构建一个拦截器
+
+```java
+
+import com.netflix.hystrix.HystrixCommand;
+import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.HystrixCommandProperties;
+import com.netflix.hystrix.HystrixThreadPoolProperties;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+
+public class HystrixRestInterceptor implements ClientHttpRequestInterceptor, ApplicationContextAware, InitializingBean {
+
+    private Integer timeOut = 3000;
+
+    private ApplicationContext applicationContext;
+
+    private Map<String, RestTemplateFallback> restTemplateFallbackMap;
+
+    @Override
+    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+        throws IOException {
+        final URI originalUri = request.getURI();
+        // todo 参数配置化
+        HystrixCommandGroupKey hystrixCommandGroupKey = HystrixCommandGroupKey.Factory.asKey(originalUri.toString());
+
+        HystrixCommandProperties.Setter propertiesSetter = HystrixCommandProperties.Setter()
+            .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD)
+            .withExecutionTimeoutInMilliseconds(this.timeOut).withCircuitBreakerEnabled(true) // 开启熔断功能
+            .withCircuitBreakerErrorThresholdPercentage(50).withCircuitBreakerRequestVolumeThreshold(5) // 默认的请求样本参数
+            .withCircuitBreakerSleepWindowInMilliseconds(5000) // 熔断后的间隔重试时间
+            .withExecutionIsolationThreadInterruptOnTimeout(true);// 错误率达到多少开始熔断
+
+        HystrixThreadPoolProperties.Setter threadPoolProperties = HystrixThreadPoolProperties.Setter();
+
+        threadPoolProperties.withCoreSize(8).withMaxQueueSize(100).withMaximumSize(20)
+            .withAllowMaximumSizeToDivergeFromCoreSize(true).withMetricsRollingStatisticalWindowBuckets(5)
+            .withMetricsRollingStatisticalWindowInMilliseconds(30).withKeepAliveTimeMinutes(10);
+
+        HystrixCommand.Setter setter = HystrixCommand.Setter.withGroupKey(hystrixCommandGroupKey);
+        setter.andCommandPropertiesDefaults(propertiesSetter);
+        setter.andThreadPoolPropertiesDefaults(threadPoolProperties);
+        return new RestHystrixCommand(setter, restTemplateFallbackMap, request, body, execution).execute();
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        restTemplateFallbackMap = new HashMap<>();
+        Map<String, RestTemplateFallback> fallbackBeansOfTypeMap =
+            this.applicationContext.getBeansOfType(RestTemplateFallback.class);
+        if (fallbackBeansOfTypeMap != null || fallbackBeansOfTypeMap.size() > 0) {
+            fallbackBeansOfTypeMap.forEach((K, V) -> {
+                String url = V.url();
+                restTemplateFallbackMap.put(url, V);
+            });
+        }
+    }
+
+    public void setTimeOut(Integer timeOut) {
+        this.timeOut = timeOut;
+    }
+}
+```
+
+构建Hystrix的执行器
+
+```java
+
+import com.netflix.hystrix.HystrixCommand;
+import com.netflix.hystrix.HystrixCommandGroupKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+
+import java.io.IOException;
+import java.util.Map;
+
+public class RestHystrixCommand extends HystrixCommand<ClientHttpResponse> {
+    private Logger logger = LoggerFactory.getLogger(getClass());
+    private ClientHttpRequestExecution execution;
+    private HttpRequest request;
+    private byte[] body;
+    private volatile ClientHttpResponse response;
+    private Map<String, RestTemplateFallback> restTemplateFallbackMap;
+
+    protected RestHystrixCommand(Setter setter, Map<String, RestTemplateFallback> restTemplateFallbackMap,
+        HttpRequest request, byte[] body, ClientHttpRequestExecution execution) {
+        super(setter);
+        this.execution = execution;
+        this.request = request;
+        this.body = body;
+        this.restTemplateFallbackMap = restTemplateFallbackMap;
+    }
+
+    @Override
+    protected ClientHttpResponse run() throws Exception {
+        String url = this.request.getURI().toString();
+        // 这里是基本不会报错的，但是可以通过状态码来标识请求的成功还是失败
+        ClientHttpResponse execute = this.execution.execute(request, body);
+        if (execute.getStatusCode() != HttpStatus.OK && restTemplateFallbackMap.get(url) != null) {
+            response = execute;
+            logger.warn("异常状态码: " + execute.getStatusCode());
+            throw new HttpServerErrorException(execute.getStatusCode());
+        }
+        logger.warn("url : " + url + " 状态成功..");
+        return execute;
+    }
+
+    @Override
+    protected ClientHttpResponse getFallback() {
+
+        // 这里可能触发的条件: 1. 异常 \ 超时
+        String url = this.request.getURI().toString();
+
+        try {
+            logger.warn("触发失败回调...." + url);
+
+            RestTemplateFallback restTemplateFallback = restTemplateFallbackMap.get(url);
+
+            if (restTemplateFallback == null) {
+
+                restTemplateFallback = new RestTemplateFallback<Object>() {
+                    @Override
+                    public String url() {
+                        return null;
+                    }
+
+                    @Override
+                    public Object invoke(HttpRequest httpRequest, String body) {
+                        return "触发了默认的失败回调接口 : " + httpRequest.getURI().toString();
+                    }
+                };
+                return new FallbackClientHttpResponse(restTemplateFallback.invoke(request, new String(body)));
+            } else {
+                Object result = restTemplateFallback.invoke(request, new String(body));
+                return new FallbackClientHttpResponse(result);
+            }
+        } catch (Exception e) {
+            logger.error("第三方调用失败回调失败", e);
+        }
+
+        return null;
+    }
+}
+```
+
+失败回调的接口类:
+
+```java
+
+import org.springframework.http.HttpRequest;
+
+/**
+ * 第三方调用，失败回调接口
+ *
+ * @param <RS>
+ */
+public interface RestTemplateFallback<RS> {
+
+    /**
+     * 请求第三方的URL标识
+     *
+     * @return
+     */
+    String url();
+
+    /**
+     * 回调的方法，会先根据url()方法判断是否匹配,再执行invoke方法
+     *
+     * @param httpRequest
+     * @param body
+     * @return
+     */
+    RS invoke(HttpRequest httpRequest, String body);
+
+}
+
+```
+
+`RestTemplate`的返回结果包装
+
+```java
+import com.alibaba.fastjson.JSON;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.client.AbstractClientHttpResponse;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+public class FallbackClientHttpResponse extends AbstractClientHttpResponse {
+
+    private Object object;
+
+    public FallbackClientHttpResponse(Object object) {
+        this.object = object;
+    }
+
+    @Override
+    public int getRawStatusCode() throws IOException {
+        return HttpStatus.OK.value();
+    }
+
+    @Override
+    public String getStatusText() throws IOException {
+        return null;
+    }
+
+    @Override
+    public void close() {
+
+    }
+
+    @Override
+    public InputStream getBody() throws IOException {
+        if (object instanceof InputStream) {
+            return (InputStream)object;
+        }
+        byte[] bytes = JSON.toJSONBytes(object);
+        return new ByteArrayInputStream(bytes);
+    }
+
+    @Override
+    public HttpHeaders getHeaders() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("fallback", "true");
+        return httpHeaders;
+    }
+}
+```
+
+# hystrix 源码解析
+
+目标类: `com.netflix.hystrix.AbstractCommand#AbstractCommand`
+
+定义顶层逻辑，负责主流程的运转
+
+|      | 描述          |      | 接口 |      |                             |      | 实现                              |      | 加载方式 |      |
+| ---- | ------------- | ---- | ---- | ---- | :-------------------------- | ---- | --------------------------------- | ---- | -------- | ---- |
+|      | 配置          |      |      |      |                             |      | HystrixCommandProperties          |      |          |      |
+|      | 监控指标      |      |      |      |                             |      | HystrixCommandMetrics             |      |          |      |
+|      | 熔断器        |      |      |      | HystrixCircuitBreaker       |      | HystrixCircuitBreakerImpl         |      |          |      |
+|      | 线程池定义    |      |      |      | HystrixThreadPool           |      | HystrixThreadPoolDefault          |      |          |      |
+|      | 并发策略      |      |      |      | HystrixConcurrencyStrategy  |      | HystrixConcurrencyStrategyDefault |      |          |      |
+|      | 执行发布      |      |      |      | HystrixCommandExecutionHook |      | HystrixCommandExecutionHook       |      |          |      |
+|      | 请求缓存\合并 |      |      |      |                             |      | HystrixRequestCache               |      |          |      |
+|      | 请求日志      |      |      |      |                             |      | HystrixRequestLog                 |      |          |      |
+|      |               |      |      |      |                             |      |                                   |      |          |      |
+
+目标类: `com.netflix.hystrix.HystrixCommand`
+
+负责执行具体的逻辑，继承了AbstractCommand拥有了大量组件模版的能力,实现了`HystrixExecutable`，负责调用调度执行AbstractCommand 所提供的功能，其中暴露了两个核心的方法：
+
+- run() :  负责执行具体的业务执行器，负责拿到业务中的结果调用，过程中产生的超时、异常等等因素将交由hystrix接管。
+- getFallback() :  当超时、异常产生时，会交给客户端调用实际的方法。
+
+
+
+所有的初始化的工作都在`com.netflix.hystrix.AbstractCommand#AbstractCommand`中完成
+
+
+
+**rxjava**的流程构建则在`com.netflix.hystrix.AbstractCommand#toObservable`中
+
