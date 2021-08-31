@@ -4,6 +4,10 @@
 
 
 
+
+
+
+
 [avue-cli 源码地址](https://gitee.com/smallweigit/avue-cli)
 
 1. 首先需要熟悉一下VUE应用程序的各个目录的作用
@@ -21,4 +25,23 @@
 > 从里面就能找到要渲染的VUE文件，而VUE文件内部就包含了所有渲染的逻辑
 
 3. 所有拦截器都会被src/mock拦截下来，然后去对比路径，符合的直接mock成模拟数据。
+
+
+
+
+
+
+
+# 遇到问题
+
+#### 1、 Error: Rule can only have one resource source (provided resource and test + include + exclude) in { ...
+
+## 解决方案：
+
+1. 先删掉 package-lock.json
+2. 手动在 package.json 的 devDependencies 里添加 “webpack”: “^4.23.0”,
+3. 重新安装全部依赖： npm install
+4. 重新运行，发现问题解决
+
+
 
