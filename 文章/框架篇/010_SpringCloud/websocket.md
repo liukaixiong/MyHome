@@ -15,7 +15,6 @@ SimpUserRegistry : 所有用户的sessionId存储地方
 
 - DefaultSimpUserRegistry:默认的用户容器
   - 监听了用户的连接、下线、以及订阅
-- 
 
 AbstractBrokerMessageHandler  : 多线程流程转发控制器
 

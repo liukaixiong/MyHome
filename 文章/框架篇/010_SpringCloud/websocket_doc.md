@@ -4,9 +4,33 @@
 
 [测试环境demo](http://101.132.138.87:5556/index.html)
 
+
+
+## 项目地址
+
+`elab-marketing-websocket` : 该应用集成了`spring-cloud-netflix-zuul-websocket` 之后，通过访问请求参数,转发到特定的服务中.
+
+
+
+### 案例演示:
+
+启动入口类: `WebSocketServerApplication` 
+
+启动完成之后访问:
+
+http://localhost:5556/index.html 即可访问页面案例，可以开启多个窗口进行：
+
+- 单聊
+- 多聊
+- 微服务访问
+
+前端的话可能需要集成`sockjs.min.js` ，具体可以查看`index.html` 的演示页面.
+
 ## 地址
 
-**最终调用的路由举例**:ws://localhost:5556/gs-guide-websocket/449/dm5mdsvo/websocket
+**websocket最终调用的路由举例**:ws://localhost:5556/gs-guide-websocket/449/dm5mdsvo/websocket
+
+[可以直接通过在线websocket调试](http://coolaf.com/tool/chattest)
 
 449 : 数字随机数
 
@@ -68,13 +92,17 @@ dm5mdsvo : 英文随机数
 
 群聊消息
 
+```java
 ["SUBSCRIBE\nid:sub-1\ndestination:/topic/allUser\n\n\u0000"]
+```
 
 #### /user/topic/allUser
 
 单聊消息
 
+```java
 ["SUBSCRIBE\nid:sub-2\ndestination:/user/topic/allUser\n\n\u0000"]
+```
 
 ### send
 
@@ -94,6 +122,8 @@ dm5mdsvo : 英文随机数
 
 参考:
 
+访问`elab-marketing-user`服务的`/enum/queryEnumList`接口
+
 ```java
 ["SEND\nproject:elab-marketing-user\nmethod:POST\npath:/enum/queryEnumList\nbody:{     \"houseId\":0,     \"name\":\"\",     \"type\":\"\" }\ndestination:/ws/remote/invoke\ncontent-length:61\n\n\"{     \\\"houseId\\\":0,     \\\"name\\\":\\\"\\\",     \\\"type\\\":\\\"\\\" }\"\u0000"]
 ```
@@ -102,7 +132,7 @@ dm5mdsvo : 英文随机数
 
 ## 后端
 
-### 路由层   
+### 路由层
 
 websocket 会根据事件回调这里面的路由地址。
 
